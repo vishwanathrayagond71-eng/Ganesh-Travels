@@ -1,0 +1,114 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<div class="page-hero" style="background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1400')">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1><i class="fas fa-info-circle me-3"></i>About Us</h1>
+    <p>Know the story behind India's most trusted travel partner</p>
+  </div>
+</div>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <span class="section-badge">Our Story</span>
+        <h2 class="mt-2">Turning Travel Dreams into Memories Since 2009</h2>
+        <p class="lead">At Ganesh Travels, we believe that travel is not just about visiting places — it's about creating lifelong memories with the people you love.</p>
+        <p>Founded in Bagalkote in 2009, we started as a small team of passionate travel enthusiasts. Today, we've grown into one of Karnataka's most trusted travel agencies, having served over 50,000 happy travelers across 200+ destinations.</p>
+        <p>From the majestic peaks of the Himalayas to the pristine beaches of Goa, from the ancient temples of Varanasi to the luxury resorts of Maldives — we bring the world to you.</p>
+        <div class="row g-3 mt-3">
+          <div class="col-6"><div class="about-stat"><h3>50,000+</h3><p>Happy Travelers</p></div></div>
+          <div class="col-6"><div class="about-stat"><h3>200+</h3><p>Destinations</p></div></div>
+          <div class="col-6"><div class="about-stat"><h3>15+</h3><p>Years Experience</p></div></div>
+          <div class="col-6"><div class="about-stat"><h3>4.9★</h3><p>Average Rating</p></div></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="about-image-grid">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400" alt="Mountains" class="about-img about-img-1">
+          <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=400" alt="Beach" class="about-img about-img-2">
+          <img src="https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400" alt="Taj Mahal" class="about-img about-img-3">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="section-padding bg-light-custom">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Our People</span>
+      <h2>Our Team</h2>
+      <p>Passionate travel experts dedicated to making your journey perfect</p>
+    </div>
+    <div class="row g-4">
+      <% if (team && team.length > 0) { %>
+        <% team.forEach(member => { %>
+        <div class="col-md-3 col-6">
+          <div class="team-card">
+            <img src="<%= member.image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300' %>" alt="<%= member.name %>" class="team-avatar">
+            <h6><%= member.name %></h6>
+            <small><%= member.role %></small>
+          </div>
+        </div>
+        <% }) %>
+      <% } else { %>
+        <div class="col-12 text-center text-muted">
+          <p>No team members listed yet.</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section-padding bg-light-custom">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">FAQ</span>
+      <h2>Frequently Asked Questions</h2>
+      <p>Find answers to common questions about our services</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="accordion" id="faqAccordion">
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">How do I book a tour?</button></h2>
+            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">Simply go to the <a href="/booking">Booking page</a>, select your destination, travel dates, number of guests, and fill in your personal details. We'll confirm your booking via email within 24 hours.</div>
+            </div>
+          </div>
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">What is your cancellation policy?</button></h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">Free cancellation within 24 hours of booking. Cancellations made 7+ days before departure receive a 75% refund. Cancellations made within 7 days are non-refundable. Contact us for special circumstances.</div>
+            </div>
+          </div>
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Are meals included in the packages?</button></h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">This depends on the specific package. Each package listing shows exactly what's included. Most packages include daily breakfast, and some include all meals. Always check the "What's Included" section before booking.</div>
+            </div>
+          </div>
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">Do you offer customized tour packages?</button></h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">Absolutely! We specialize in customized tours for families, couples, and groups. Contact us via our <a href="/contact">Contact Page</a> or call us directly, and our travel experts will design your perfect itinerary.</div>
+            </div>
+          </div>
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">Is my payment secure?</button></h2>
+            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">Yes, completely. We use industry-standard security for all transactions. Your personal and payment information is fully encrypted and never shared with third parties.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

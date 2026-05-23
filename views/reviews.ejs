@@ -1,0 +1,139 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<div class="page-hero" style="background-image: url('https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1400')">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1><i class="fas fa-star me-3"></i>Customer Reviews</h1>
+    <p>Real experiences from real travelers — share yours too!</p>
+  </div>
+</div>
+
+<!-- Flash Messages -->
+<% if (messages.success && messages.success.length > 0) { %>
+  <div class="alert alert-success alert-dismissible fade show m-3">
+    <i class="fas fa-check-circle me-2"></i><%= messages.success[0] %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+<% if (messages.error && messages.error.length > 0) { %>
+  <div class="alert alert-danger alert-dismissible fade show m-3">
+    <i class="fas fa-exclamation-circle me-2"></i><%= messages.error[0] %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Reviews Display -->
+      <div class="col-lg-8">
+        <h4 class="mb-4">All Reviews (<%= reviews.length %>)</h4>
+        <% if (reviews.length === 0) { %>
+        <div class="text-center py-5">
+          <i class="fas fa-star" style="font-size:4rem;color:#ccc"></i>
+          <h5 class="mt-3 text-muted">No reviews yet. Be the first to review!</h5>
+        </div>
+        <% } else { %>
+        <div class="reviews-list">
+          <% reviews.forEach(review => { %>
+          <div class="review-card-full">
+            <div class="review-header">
+              <div class="review-avatar-lg"><%= review.userName.charAt(0).toUpperCase() %></div>
+              <div class="review-meta">
+                <strong><%= review.userName %></strong>
+                <div class="review-stars">
+                  <% for(let i=0; i<5; i++) { %>
+                    <i class="fas fa-star <%= i < parseInt(review.rating) ? 'text-warning' : 'text-muted' %>"></i>
+                  <% } %>
+                  <span class="ms-1"><%= review.rating %>/5</span>
+                </div>
+                <small class="text-muted"><i class="fas fa-map-pin me-1"></i><%= review.destination %> • <%= review.createdAt %></small>
+              </div>
+            </div>
+            <p class="review-text"><%= review.comment %></p>
+          </div>
+          <% }) %>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- Write Review Form -->
+      <div class="col-lg-4">
+        <div class="write-review-card sticky-top" style="top: 80px;">
+          <h5><i class="fas fa-pen-alt me-2 text-primary"></i>Write a Review</h5>
+          <form action="/reviews" method="POST" id="reviewForm">
+            <% if (!(typeof user !== 'undefined' && user)) { %>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+              </div>
+              <div class="col-6">
+                <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+              </div>
+            </div>
+            <% } %>
+
+            <div class="mb-3">
+              <label class="form-label">Destination *</label>
+              <select name="destination" class="form-select" required>
+                <option value="">Select Destination</option>
+                <% destinations.forEach(d => { %>
+                  <option value="<%= d.name %>"><%= d.name %></option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Rating *</label>
+              <div class="star-rating-input" id="starRating">
+                <input type="hidden" name="rating" id="ratingValue" value="" required>
+                <span class="star" data-val="1"><i class="fas fa-star"></i></span>
+                <span class="star" data-val="2"><i class="fas fa-star"></i></span>
+                <span class="star" data-val="3"><i class="fas fa-star"></i></span>
+                <span class="star" data-val="4"><i class="fas fa-star"></i></span>
+                <span class="star" data-val="5"><i class="fas fa-star"></i></span>
+              </div>
+              <small class="text-muted" id="ratingText">Click a star to rate</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Your Review *</label>
+              <textarea name="comment" class="form-control" rows="4" placeholder="Share your travel experience..." required minlength="20"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fas fa-paper-plane me-2"></i>Submit Review
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+// Star Rating Interaction
+const stars = document.querySelectorAll('.star');
+stars.forEach(star => {
+  star.addEventListener('click', function() {
+    const val = parseInt(this.dataset.val);
+    document.getElementById('ratingValue').value = val;
+    const ratingTexts = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+    document.getElementById('ratingText').textContent = ratingTexts[val] + ' (' + val + '/5)';
+    stars.forEach((s, i) => {
+      s.style.color = i < val ? '#f4c542' : '#ccc';
+    });
+  });
+  star.addEventListener('mouseenter', function() {
+    const val = parseInt(this.dataset.val);
+    stars.forEach((s, i) => { s.style.color = i < val ? '#f4c542' : '#ccc'; });
+  });
+});
+document.getElementById('starRating').addEventListener('mouseleave', function() {
+  const val = parseInt(document.getElementById('ratingValue').value);
+  stars.forEach((s, i) => { s.style.color = i < val ? '#f4c542' : '#ccc'; });
+});
+</script>

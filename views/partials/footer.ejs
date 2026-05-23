@@ -1,0 +1,109 @@
+<!-- ============================================================
+     FOOTER - Newsletter, social links, quick nav, copyright
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Brand Info -->
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">
+          <h5><i class="fas fa-plane-departure me-2"></i>Ganesh Travels</h5>
+          <p>Your trusted travel partner for unforgettable journeys across India and around the world. We make your dream vacation a reality.</p>
+          <div class="social-links">
+            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-lg-2 col-md-6 col-6">
+        <h6 class="footer-heading">Quick Links</h6>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/destinations">Destinations</a></li>
+          <li><a href="/packages">Packages</a></li>
+          <li><a href="/booking">Book Now</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Destinations -->
+      <div class="col-lg-2 col-md-6 col-6">
+        <h6 class="footer-heading">Top Destinations</h6>
+        <ul class="footer-links">
+          <li><a href="/destinations">Goa Beaches</a></li>
+          <li><a href="/destinations">Manali, Himachal</a></li>
+          <li><a href="/destinations">Taj Mahal, Agra</a></li>
+          <li><a href="/destinations">Kerala</a></li>
+          <li><a href="/destinations">Ladakh</a></li>
+          <li><a href="/destinations">Bali, Indonesia</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-lg-4 col-md-6">
+        <h6 class="footer-heading">Contact Info</h6>
+        <div class="footer-contact mt-3">
+          <p><i class="fas fa-phone me-2"></i><%= contactPhone %></p>
+          <p><i class="fas fa-map-marker-alt me-2"></i>Ganesh Travels, Vidyagiri, Bagalkote, Karnataka</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ganesh Travels. All Rights Reserved. Made with <i class="fas fa-heart text-danger"></i> in India</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="/admin/login">Admin</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Chatbot Widget -->
+<div class="chatbot-widget" id="chatbotWidget">
+  <div class="chatbot-header">
+    <span><i class="fas fa-robot me-2"></i>Travel Assistant</span>
+    <button onclick="toggleChatbot()" class="chatbot-close"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chatbot-messages" id="chatMessages">
+    <div class="chat-msg bot-msg">
+      <i class="fas fa-robot"></i>
+      <span>Hello! 👋 I'm your travel assistant. How can I help you today?</span>
+    </div>
+  </div>
+  <div class="chatbot-quick-btns">
+    <button onclick="sendChatQuestion('Best destinations in India?')">🇮🇳 Indian Destinations</button>
+    <button onclick="sendChatQuestion('What are your tour packages?')">📦 Tour Packages</button>
+    <button onclick="sendChatQuestion('How to book a tour?')">📅 How to Book</button>
+    <button onclick="sendChatQuestion('Cancellation policy?')">❌ Cancellations</button>
+  </div>
+  <div class="chatbot-input">
+    <input type="text" id="chatInput" placeholder="Type your question..." onkeypress="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+<button class="chatbot-btn" id="chatbotBtn" onclick="toggleChatbot()" title="Chat with us!">
+  <i class="fas fa-comments"></i>
+  <span class="chatbot-badge">1</span>
+</button>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script src="/js/main.js"></script>
+<script>
+  window.contactPhone = "<%= contactPhone %>";
+  window.contactEmail = "<%= contactEmail %>";
+</script>
+<script src="/js/chat.js"></script>
+</body>
+</html>

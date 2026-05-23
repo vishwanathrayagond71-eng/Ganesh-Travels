@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: #f0f4f8; font-family: 'Outfit', sans-serif; }
+    .admin-sidebar { background: #1d3557; min-height: 100vh; position: fixed; width: 260px; top:0; left:0; z-index:100; padding: 20px 0; }
+    .admin-main { margin-left: 260px; padding: 20px; }
+    .admin-brand { color: white; text-align: center; padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .admin-brand i { font-size: 2rem; color: #e9c46a; }
+    .admin-nav a { display: flex; align-items: center; padding: 12px 20px; color: rgba(255,255,255,0.75); text-decoration: none; transition: all 0.3s; gap: 10px; }
+    .admin-nav a:hover, .admin-nav a.active { background: rgba(255,255,255,0.1); color: white; border-left: 3px solid #e9c46a; }
+    .admin-nav i { width: 20px; }
+    .stat-card-admin { background: white; border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    .stat-icon-admin { width: 55px; height: 55px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
+    .admin-table-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .admin-topbar { background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    @media(max-width:768px) { .admin-sidebar{display:none} .admin-main{margin-left:0} }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="admin-sidebar">
+  <div class="admin-brand">
+    <i class="fas fa-plane-departure"></i>
+    <h6 class="mt-2 text-white">Ganesh Travels</h6>
+    <small style="color:rgba(255,255,255,0.5)">Admin Panel</small>
+  </div>
+  <nav class="admin-nav mt-3">
+    <a href="#" onclick="showSection('overview')" class="active" id="nav-overview"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+    <a href="#" onclick="showSection('users')" id="nav-users"><i class="fas fa-users"></i>Users (<%= users.length %>)</a>
+    <a href="#" onclick="showSection('bookings')" id="nav-bookings"><i class="fas fa-calendar-check"></i>Bookings (<%= bookings.length %>)</a>
+    <a href="#" onclick="showSection('reviews')" id="nav-reviews"><i class="fas fa-star"></i>Reviews (<%= reviews.length %>)</a>
+    <a href="#" onclick="showSection('contacts')" id="nav-contacts"><i class="fas fa-envelope"></i>Contacts (<%= contacts.length %>)</a>
+    <a href="#" onclick="showSection('newsletter')" id="nav-newsletter"><i class="fas fa-newspaper"></i>Newsletter (<%= newsletter.length %>)</a>
+    <a href="#" onclick="showSection('settings')" id="nav-settings"><i class="fas fa-cog"></i>Agency Settings</a>
+    <a href="#" onclick="showSection('team')" id="nav-team"><i class="fas fa-users-cog"></i>Manage Team</a>
+    <hr style="border-color:rgba(255,255,255,0.1)">
+    <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i>View Website</a>
+    <a href="/admin/logout" style="color:#ff6b6b"><i class="fas fa-sign-out-alt"></i>Logout</a>
+  </nav>
+</div>
+
+<!-- Main Content -->
+<div class="admin-main">
+  <!-- Topbar -->
+  <div class="admin-topbar">
+    <h5 class="mb-0"><i class="fas fa-shield-alt text-danger me-2"></i>Admin Dashboard</h5>
+    <div class="d-flex align-items-center gap-3">
+      <span class="text-muted">Welcome, <strong><%= admin.name %></strong></span>
+      <a href="/admin/logout" class="btn btn-danger btn-sm">Logout</a>
+    </div>
+  </div>
+
+  <!-- Flash Messages -->
+  <% if (messages.success && messages.success.length > 0) { %>
+    <div class="alert alert-success alert-dismissible fade show">
+      <i class="fas fa-check-circle me-2"></i><%= messages.success[0] %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>
+  <% if (messages.error && messages.error.length > 0) { %>
+    <div class="alert alert-danger"><%= messages.error[0] %></div>
+  <% } %>
+
+  <!-- ============================================================
+       OVERVIEW SECTION
+       ============================================================ -->
+  <div class="admin-section active" id="section-overview">
+    <div class="row g-4 mb-4">
+      <div class="col-md-3 col-6">
+        <div class="stat-card-admin">
+          <div class="stat-icon-admin" style="background:#457b9d"><i class="fas fa-users"></i></div>
+          <div><h4 class="mb-0"><%= users.length %></h4><small class="text-muted">Total Users</small></div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card-admin">
+          <div class="stat-icon-admin" style="background:#2a9d8f"><i class="fas fa-calendar-check"></i></div>
+          <div><h4 class="mb-0"><%= bookings.length %></h4><small class="text-muted">Total Bookings</small></div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card-admin">
+          <div class="stat-icon-admin" style="background:#e9c46a"><i class="fas fa-star"></i></div>
+          <div><h4 class="mb-0"><%= reviews.length %></h4><small class="text-muted">Total Reviews</small></div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card-admin">
+          <div class="stat-icon-admin" style="background:#e76f51"><i class="fas fa-newspaper"></i></div>
+          <div><h4 class="mb-0"><%= newsletter.length %></h4><small class="text-muted">Subscribers</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Download Buttons -->
+    <div class="admin-table-card">
+      <h6 class="mb-3"><i class="fas fa-download me-2"></i>Download Excel Files</h6>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="/admin/download/users" class="btn btn-outline-primary"><i class="fas fa-file-excel me-1"></i>Users.xlsx</a>
+        <a href="/admin/download/bookings" class="btn btn-outline-success"><i class="fas fa-file-excel me-1"></i>Bookings.xlsx</a>
+        <a href="/admin/download/reviews" class="btn btn-outline-warning"><i class="fas fa-file-excel me-1"></i>Reviews.xlsx</a>
+        <a href="/admin/download/contacts" class="btn btn-outline-info"><i class="fas fa-file-excel me-1"></i>Contacts.xlsx</a>
+        <a href="/admin/download/newsletter" class="btn btn-outline-secondary"><i class="fas fa-file-excel me-1"></i>Newsletter.xlsx</a>
+      </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="admin-table-card">
+      <h6 class="mb-3"><i class="fas fa-clock me-2"></i>Recent Bookings</h6>
+      <% if (bookings.length === 0) { %><p class="text-muted">No bookings yet.</p>
+      <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <thead><tr><th>Name</th><th>Destination</th><th>Date</th><th>Guests</th><th>Status</th></tr></thead>
+          <tbody>
+            <% bookings.slice(-5).reverse().forEach(b => { %>
+            <tr>
+              <td><%= b.name %></td>
+              <td><%= b.destination %></td>
+              <td><%= b.date %></td>
+              <td><%= b.guests %></td>
+              <td><span class="badge bg-<%= b.status === 'confirmed' ? 'success' : 'warning' %> text-dark"><%= b.status %></span></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       USERS SECTION
+       ============================================================ -->
+  <div class="admin-section" id="section-users">
+    <div class="admin-table-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6><i class="fas fa-users me-2"></i>Registered Users (<%= users.length %>)</h6>
+        <a href="/admin/download/users" class="btn btn-sm btn-outline-primary"><i class="fas fa-download me-1"></i>Download</a>
+      </div>
+      <% if (users.length === 0) { %><p class="text-muted">No users registered yet.</p>
+      <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark"><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Registered</th><th>Action</th></tr></thead>
+          <tbody>
+            <% users.forEach((u, i) => { %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><strong><%= u.name %></strong></td>
+              <td><%= u.email %></td>
+              <td><%= u.phone %></td>
+              <td><small><%= u.createdAt %></small></td>
+              <td>
+                <form action="/admin/delete/users/<%= u.id %>" method="POST" onsubmit="return confirm('Delete this user?')">
+                  <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOOKINGS SECTION
+       ============================================================ -->
+  <div class="admin-section" id="section-bookings">
+    <div class="admin-table-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6><i class="fas fa-calendar-check me-2"></i>All Bookings (<%= bookings.length %>)</h6>
+        <a href="/admin/download/bookings" class="btn btn-sm btn-outline-success"><i class="fas fa-download me-1"></i>Download</a>
+      </div>
+      <% if (bookings.length === 0) { %><p class="text-muted">No bookings yet.</p>
+      <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark"><tr><th>#</th><th>Name</th><th>Email</th><th>Destination</th><th>Date</th><th>Guests</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <% bookings.forEach((b, i) => { %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= b.name %></td>
+              <td><small><%= b.email %></small></td>
+              <td><%= b.destination %></td>
+              <td><%= b.date %></td>
+              <td><%= b.guests %></td>
+              <td><span class="badge bg-warning text-dark"><%= b.status %></span></td>
+              <td>
+                <form action="/admin/delete/bookings/<%= b.id %>" method="POST" onsubmit="return confirm('Delete this booking?')">
+                  <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       REVIEWS SECTION
+       ============================================================ -->
+  <div class="admin-section" id="section-reviews">
+    <div class="admin-table-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6><i class="fas fa-star me-2"></i>All Reviews (<%= reviews.length %>)</h6>
+        <a href="/admin/download/reviews" class="btn btn-sm btn-outline-warning"><i class="fas fa-download me-1"></i>Download</a>
+      </div>
+      <% if (reviews.length === 0) { %><p class="text-muted">No reviews yet.</p>
+      <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark"><tr><th>#</th><th>User</th><th>Destination</th><th>Rating</th><th>Comment</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <% reviews.forEach((r, i) => { %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= r.userName %></td>
+              <td><%= r.destination %></td>
+              <td>
+                <% for(let j=0; j<parseInt(r.rating); j++) { %><i class="fas fa-star text-warning" style="font-size:11px"></i><% } %>
+              </td>
+              <td><small><%= r.comment.substring(0, 60) %>...</small></td>
+              <td><span class="badge bg-success"><%= r.status %></span></td>
+              <td>
+                <form action="/admin/delete/reviews/<%= r.id %>" method="POST" onsubmit="return confirm('Delete this review?')">
+                  <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       CONTACTS SECTION
+       ============================================================ -->
+  <div class="admin-section" id="section-contacts">
+    <div class="admin-table-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6><i class="fas fa-envelope me-2"></i>Contact Messages (<%= contacts.length %>)</h6>
+        <a href="/admin/download/contacts" class="btn btn-sm btn-outline-info"><i class="fas fa-download me-1"></i>Download</a>
+      </div>
+      <% if (contacts.length === 0) { %><p class="text-muted">No contact messages yet.</p>
+      <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark"><tr><th>#</th><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody>
+            <% contacts.forEach((c, i) => { %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= c.name %></td>
+              <td><small><%= c.email %></small></td>
+              <td><%= c.subject %></td>
+              <td><small><%= c.message.substring(0,60) %>...</small></td>
+              <td><small><%= c.createdAt %></small></td>
+              <td>
+                <form action="/admin/delete/contacts/<%= c.id %>" method="POST" onsubmit="return confirm('Delete?')">
+                  <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       NEWSLETTER SECTION
+       ============================================================ -->
+  <div class="admin-section" id="section-newsletter">
+    <div class="admin-table-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6><i class="fas fa-newspaper me-2"></i>Newsletter Subscribers (<%= newsletter.length %>)</h6>
+        <a href="/admin/download/newsletter" class="btn btn-sm btn-outline-secondary"><i class="fas fa-download me-1"></i>Download</a>
+      </div>
+      <% if (newsletter.length === 0) { %><p class="text-muted">No subscribers yet.</p>
+      <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-dark"><tr><th>#</th><th>Email</th><th>Subscribed On</th><th>Action</th></tr></thead>
+          <tbody>
+            <% newsletter.forEach((n, i) => { %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= n.email %></td>
+              <td><%= n.createdAt %></td>
+              <td>
+                <form action="/admin/delete/newsletter/<%= n.id %>" method="POST" onsubmit="return confirm('Remove subscriber?')">
+                  <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SETTINGS SECTION
+       ============================================================ -->
+  <div class="admin-section" id="section-settings">
+    <div class="admin-table-card">
+      <h6 class="mb-4"><i class="fas fa-cog me-2"></i>Agency Settings (Tourists Contact Details)</h6>
+      <form action="/admin/settings/edit" method="POST">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Admin Contact Mobile Number</label>
+            <input type="text" name="contact_phone" class="form-control" value="<%= currentPhone %>" placeholder="+91 98765 43210" required>
+            <small class="text-muted">This number will reflect in the headers, contact page, and footer for tourists.</small>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Admin Gmail ID</label>
+            <input type="email" name="contact_email" class="form-control" value="<%= currentEmail %>" placeholder="aditya777@gmail.com" required>
+            <small class="text-muted">This email address will reflect on the contact page for tourists.</small>
+          </div>
+          <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Save Settings</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TEAM SECTION
+       ============================================================ -->
+  <div class="admin-section" id="section-team">
+    <div class="row g-4">
+      <!-- Add Team Member Form -->
+      <div class="col-lg-4">
+        <div class="admin-table-card">
+          <h6 class="mb-4"><i class="fas fa-user-plus me-2"></i>Add Team Member</h6>
+          <form action="/admin/team/add" method="POST">
+            <div class="mb-3">
+              <label class="form-label">Full Name *</label>
+              <input type="text" name="name" class="form-control" placeholder="Ganesh" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Role / Designation *</label>
+              <input type="text" name="role" class="form-control" placeholder="Founder & MD" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Profile Image URL (Optional)</label>
+              <input type="url" name="image" class="form-control" placeholder="https://images.unsplash.com/photo-...">
+            </div>
+            <button type="submit" class="btn btn-success w-100"><i class="fas fa-plus me-1"></i>Add Member</button>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Current Team Members List -->
+      <div class="col-lg-8">
+        <div class="admin-table-card">
+          <h6 class="mb-4"><i class="fas fa-users-cog me-2"></i>Current Team Members</h6>
+          <% if (team.length === 0) { %>
+            <p class="text-muted">No team members added yet.</p>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Avatar</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% team.forEach(member => { %>
+                    <tr>
+                      <td>
+                        <img src="<%= member.image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300' %>" alt="<%= member.name %>" style="width: 45px; height: 45px; object-fit: cover; border-radius: 50%;">
+                      </td>
+                      <td><strong><%= member.name %></strong></td>
+                      <td><%= member.role %></td>
+                      <td>
+                        <form action="/admin/delete/team/<%= member.id %>" method="POST" onsubmit="return confirm('Delete this team member?')">
+                          <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end admin-main -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function showSection(name) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  return false;
+}
+</script>
+</body>
+</html>

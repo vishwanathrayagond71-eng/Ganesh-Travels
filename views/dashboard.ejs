@@ -1,0 +1,169 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<!-- Flash Messages -->
+<% if (messages.success && messages.success.length > 0) { %>
+  <div class="alert alert-success alert-dismissible fade show m-3">
+    <%= messages.success[0] %><button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+<% if (messages.error && messages.error.length > 0) { %>
+  <div class="alert alert-danger m-3"><%= messages.error[0] %></div>
+<% } %>
+
+<div class="page-hero page-hero-short" style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color))">
+  <div class="page-hero-content">
+    <h1><i class="fas fa-tachometer-alt me-3"></i>My Dashboard</h1>
+    <p>Welcome back, <strong><%= user.name %></strong>! Manage your bookings and profile here.</p>
+  </div>
+</div>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Sidebar / Profile -->
+      <div class="col-lg-3">
+        <div class="dashboard-sidebar">
+          <div class="profile-widget">
+            <div class="profile-avatar-lg"><%= user.name.charAt(0).toUpperCase() %></div>
+            <h5><%= user.name %></h5>
+            <p class="text-muted"><%= user.email %></p>
+          </div>
+          <div class="sidebar-nav">
+            <a href="#profile" class="sidebar-nav-link active" onclick="showTab('profile', this)">
+              <i class="fas fa-user me-2"></i>Profile
+            </a>
+            <a href="#bookings" class="sidebar-nav-link" onclick="showTab('bookings', this)">
+              <i class="fas fa-calendar-check me-2"></i>My Bookings
+              <% if (bookings.length > 0) { %><span class="badge bg-primary ms-auto"><%= bookings.length %></span><% } %>
+            </a>
+            <a href="#reviews" class="sidebar-nav-link" onclick="showTab('reviews', this)">
+              <i class="fas fa-star me-2"></i>My Reviews
+              <% if (reviews.length > 0) { %><span class="badge bg-warning ms-auto text-dark"><%= reviews.length %></span><% } %>
+            </a>
+            <hr>
+            <a href="/booking" class="sidebar-nav-link text-primary">
+              <i class="fas fa-plus-circle me-2"></i>New Booking
+            </a>
+            <a href="/logout" class="sidebar-nav-link text-danger">
+              <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+
+        <!-- Profile Tab -->
+        <div class="dash-tab" id="profileTab">
+          <div class="dash-card">
+            <h5 class="dash-card-title"><i class="fas fa-user-edit me-2"></i>Edit Profile</h5>
+            <form action="/dashboard/edit-profile" method="POST">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" name="name" class="form-control" value="<%= user.name %>" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email (cannot change)</label>
+                  <input type="email" class="form-control" value="<%= user.email %>" readonly>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" name="phone" class="form-control" value="<%= user.phone %>">
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Bookings Tab -->
+        <div class="dash-tab d-none" id="bookingsTab">
+          <div class="dash-card">
+            <h5 class="dash-card-title"><i class="fas fa-calendar-check me-2"></i>My Bookings (<%= bookings.length %>)</h5>
+            <% if (bookings.length === 0) { %>
+              <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h6>No bookings yet</h6>
+                <a href="/booking" class="btn btn-primary mt-2">Book Your First Tour</a>
+              </div>
+            <% } else { %>
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr><th>#</th><th>Destination</th><th>Date</th><th>Guests</th><th>Status</th><th>Booked On</th></tr>
+                  </thead>
+                  <tbody>
+                    <% bookings.forEach((b, i) => { %>
+                    <tr>
+                      <td><%= i+1 %></td>
+                      <td><strong><%= b.destination %></strong></td>
+                      <td><%= b.date %></td>
+                      <td><%= b.guests %></td>
+                      <td><span class="status-badge status-<%= b.status %>"><%= b.status %></span></td>
+                      <td><small><%= b.createdAt %></small></td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Reviews Tab -->
+        <div class="dash-tab d-none" id="reviewsTab">
+          <div class="dash-card">
+            <h5 class="dash-card-title"><i class="fas fa-star me-2"></i>My Reviews (<%= reviews.length %>)</h5>
+            <% if (reviews.length === 0) { %>
+              <div class="empty-state">
+                <i class="fas fa-star"></i>
+                <h6>You haven't reviewed any tours yet</h6>
+                <a href="/reviews" class="btn btn-warning mt-2">Write a Review</a>
+              </div>
+            <% } else { %>
+              <% reviews.forEach(r => { %>
+              <div class="user-review-item">
+                <div class="d-flex justify-content-between">
+                  <strong><%= r.destination %></strong>
+                  <div>
+                    <% for(let i=0; i<parseInt(r.rating); i++) { %><i class="fas fa-star text-warning"></i><% } %>
+                  </div>
+                </div>
+                <p class="mt-1 mb-0 text-muted"><%= r.comment %></p>
+                <small class="text-muted"><%= r.createdAt %></small>
+              </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+function showTab(tabName, link) {
+  // Hide all tabs
+  document.querySelectorAll('.dash-tab').forEach(t => t.classList.add('d-none'));
+  document.querySelectorAll('.sidebar-nav-link').forEach(l => l.classList.remove('active'));
+  // Show selected tab
+  document.getElementById(tabName + 'Tab').classList.remove('d-none');
+  link.classList.add('active');
+  return false;
+}
+// Handle URL hash
+if (window.location.hash === '#bookings') {
+  const link = document.querySelector('[onclick*="bookings"]');
+  if (link) showTab('bookings', link);
+}
+</script>

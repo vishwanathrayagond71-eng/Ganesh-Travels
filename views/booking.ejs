@@ -1,0 +1,151 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<div class="page-hero" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400')">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1><i class="fas fa-calendar-check me-3"></i>Book Your Tour</h1>
+    <p>Fill in the details below and we'll confirm your booking within 24 hours</p>
+  </div>
+</div>
+
+<!-- Flash Messages -->
+<% if (messages.success && messages.success.length > 0) { %>
+  <div class="alert alert-success alert-dismissible fade show m-3">
+    <i class="fas fa-check-circle me-2"></i><%= messages.success[0] %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+<% if (messages.error && messages.error.length > 0) { %>
+  <div class="alert alert-danger alert-dismissible fade show m-3">
+    <i class="fas fa-exclamation-circle me-2"></i><%= messages.error[0] %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Booking Form -->
+      <div class="col-lg-8">
+        <div class="booking-form-card">
+          <h3 class="booking-title"><i class="fas fa-paper-plane me-2"></i>Booking Details</h3>
+          <form action="/booking" method="POST" id="bookingForm">
+            <!-- Step 1: Destination -->
+            <div class="booking-step">
+              <h5 class="step-title"><span class="step-num">1</span>Choose Your Destination</h5>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Destination *</label>
+                  <select name="destination" class="form-select" required>
+                    <option value="">Select Destination</option>
+                    <optgroup label="🇮🇳 Indian Destinations">
+                      <% destinations.forEach(d => { %>
+                        <option value="<%= d.name %>" <%= preDestination === d.name ? 'selected' : '' %>><%= d.name %> (₹<%= d.price.toLocaleString() %>)</option>
+                      <% }) %>
+                    </optgroup>
+                    <optgroup label="📦 Tour Packages">
+                      <% packages.forEach(p => { %>
+                        <option value="<%= p.name %>" <%= preDestination === p.name ? 'selected' : '' %>><%= p.name %> (₹<%= p.price.toLocaleString() %>)</option>
+                      <% }) %>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Travel Date *</label>
+                  <input type="date" name="date" class="form-control" required min="<%= new Date().toISOString().split('T')[0] %>">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">No. of Guests *</label>
+                  <select name="guests" class="form-select" required>
+                    <option value="">Select</option>
+                    <% for(let i=1; i<=20; i++) { %>
+                      <option value="<%= i %>"><%= i %> <%= i === 1 ? 'Person' : 'People' %></option>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Personal Details -->
+            <div class="booking-step">
+              <h5 class="step-title"><span class="step-num">2</span>Personal Information</h5>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Full Name *</label>
+                  <input type="text" name="name" class="form-control" placeholder="Your full name" value="<%= typeof user !== 'undefined' && user ? user.name : '' %>" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email Address *</label>
+                  <input type="email" name="email" class="form-control" placeholder="your@email.com" value="<%= typeof user !== 'undefined' && user ? user.email : '' %>" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone Number *</label>
+                  <input type="tel" name="phone" class="form-control" placeholder="+91 98765 43210" value="<%= typeof user !== 'undefined' && user ? user.phone : '' %>" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Special Requirements</label>
+                  <input type="text" name="message" class="form-control" placeholder="Any special requests or needs">
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Confirm -->
+            <div class="booking-step">
+              <h5 class="step-title"><span class="step-num">3</span>Confirm Booking</h5>
+              <div class="booking-terms">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                  <label class="form-check-label" for="termsCheck">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Cancellation Policy</a></label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="updatesCheck">
+                  <label class="form-check-label" for="updatesCheck">Send me tour updates via email</label>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg w-100 mt-3" id="bookBtn">
+                <i class="fas fa-check-circle me-2"></i>Confirm Booking
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Booking Info Sidebar -->
+      <div class="col-lg-4">
+        <div class="booking-sidebar">
+          <div class="sidebar-card mb-3">
+            <h5><i class="fas fa-info-circle me-2 text-primary"></i>Booking Info</h5>
+            <ul class="info-list">
+              <li><i class="fas fa-check text-success me-2"></i>Instant booking confirmation email</li>
+              <li><i class="fas fa-check text-success me-2"></i>Free cancellation within 24 hours</li>
+              <li><i class="fas fa-check text-success me-2"></i>Best price guaranteed</li>
+              <li><i class="fas fa-check text-success me-2"></i>24/7 customer support</li>
+              <li><i class="fas fa-check text-success me-2"></i>Secure & safe payment</li>
+            </ul>
+          </div>
+          <div class="sidebar-card">
+            <h5><i class="fas fa-headset me-2 text-primary"></i>Need Help?</h5>
+            <p>Our travel experts are here to help you plan the perfect trip.</p>
+            <a href="tel:<%= contactPhone %>" class="btn btn-outline-primary w-100 mb-2">
+              <i class="fas fa-phone me-2"></i><%= contactPhone %>
+            </a>
+            <a href="/contact" class="btn btn-outline-secondary w-100">
+              <i class="fas fa-envelope me-2"></i>Send Message
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+document.getElementById('bookingForm').addEventListener('submit', function() {
+  const btn = document.getElementById('bookBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+  btn.disabled = true;
+});
+</script>

@@ -1,0 +1,107 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<!-- Flash Messages -->
+<% if (messages.success && messages.success.length > 0) { %>
+  <div class="alert alert-success m-3"><%= messages.success[0] %></div>
+<% } %>
+<% if (messages.error && messages.error.length > 0) { %>
+  <div class="alert alert-danger m-3"><%= messages.error[0] %></div>
+<% } %>
+
+<section class="auth-section">
+  <div class="auth-bg" style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400')">
+    <div class="auth-overlay"></div>
+  </div>
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100 py-5">
+      <div class="col-md-6">
+        <div class="auth-card">
+          <div class="auth-logo">
+            <i class="fas fa-plane-departure"></i>
+            <h4>Ganesh Travels</h4>
+          </div>
+          <h3 class="auth-title">Create Account</h3>
+          <p class="auth-subtitle">Join us and start your travel journey today</p>
+
+          <form action="/register" method="POST" id="registerForm">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Full Name *</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-user input-icon"></i>
+                  <input type="text" name="name" class="form-control ps-5" placeholder="Your full name" required minlength="3">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email Address *</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-envelope input-icon"></i>
+                  <input type="email" name="email" class="form-control ps-5" placeholder="your@email.com" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone Number *</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-phone input-icon"></i>
+                  <input type="tel" name="phone" class="form-control ps-5" placeholder="+91 98765 43210" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Password *</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-lock input-icon"></i>
+                  <input type="password" name="password" id="regPassword" class="form-control ps-5" placeholder="Min. 6 characters" required minlength="6">
+                  <button type="button" class="btn-eye" onclick="togglePass('regPassword', this)"><i class="fas fa-eye"></i></button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Confirm Password *</label>
+                <div class="input-icon-wrapper">
+                  <i class="fas fa-lock input-icon"></i>
+                  <input type="password" name="confirmPassword" id="regConfirm" class="form-control ps-5" placeholder="Repeat password" required>
+                  <button type="button" class="btn-eye" onclick="togglePass('regConfirm', this)"><i class="fas fa-eye"></i></button>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                  <label class="form-check-label" for="agreeTerms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary w-100 btn-lg">
+                  <i class="fas fa-user-plus me-2"></i>Create Account
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div class="auth-links">
+            <p>Already have an account? <a href="/login">Login here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<script>
+function togglePass(id, btn) {
+  const input = document.getElementById(id);
+  const icon = btn.querySelector('i');
+  if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+  else { input.type = 'password'; icon.className = 'fas fa-eye'; }
+}
+
+// Client-side password match validation
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+  const pass = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  if (pass !== confirm) {
+    e.preventDefault();
+    alert('Passwords do not match! Please check and try again.');
+  }
+});
+</script>

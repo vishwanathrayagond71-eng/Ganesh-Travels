@@ -1,0 +1,27 @@
+{
+  "name": "tours-and-tour",
+  "version": "1.0.0",
+  "description": "Professional Tourism Website with Excel Storage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "exceljs": "^4.3.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongodb": "^7.2.0",
+    "multer": "^1.4.5-lts.1",
+    "serverless-http": "^4.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

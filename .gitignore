@@ -1,0 +1,9 @@
+node_modules/
+.env
+excel-data/
+.DS_Store
+*.log
+
+# Local Netlify folder
+.netlify
+cloudflared.exe

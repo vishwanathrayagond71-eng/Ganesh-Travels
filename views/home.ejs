@@ -1,0 +1,434 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<!-- Flash Messages -->
+<% if (messages.success && messages.success.length > 0) { %>
+  <div class="alert alert-success alert-dismissible fade show m-0 rounded-0" role="alert">
+    <i class="fas fa-check-circle me-2"></i><%= messages.success[0] %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+<% if (messages.error && messages.error.length > 0) { %>
+  <div class="alert alert-danger alert-dismissible fade show m-0 rounded-0" role="alert">
+    <i class="fas fa-exclamation-circle me-2"></i><%= messages.error[0] %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
+
+<!-- ============================================================
+     HERO SECTION - Full-screen image slider with search
+     ============================================================ -->
+<section class="hero-section" id="hero">
+  <div class="hero-slider" id="heroSlider">
+    <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600')">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-star me-1"></i>Trusted by 50,000+ Travelers</div>
+        <h1 class="hero-title">Discover the <span class="hero-highlight">Wonders</span> of India</h1>
+        <p class="hero-subtitle">From the mighty Himalayas to the serene backwaters — your perfect journey starts here</p>
+      </div>
+    </div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1600')">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-globe me-1"></i>100+ International Destinations</div>
+        <h1 class="hero-title">Explore the <span class="hero-highlight">World</span> with Us</h1>
+        <p class="hero-subtitle">Unforgettable international tours at the best prices — travel is our passion</p>
+      </div>
+    </div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600')">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-heart me-1"></i>Honeymoon Specialists</div>
+        <h1 class="hero-title">Your Dream <span class="hero-highlight">Honeymoon</span> Awaits</h1>
+        <p class="hero-subtitle">Romantic packages crafted for couples — creating memories that last a lifetime</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slider Controls -->
+  <button class="hero-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+  <button class="hero-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+  <div class="hero-dots" id="heroDots">
+    <span class="hero-dot active" onclick="goToSlide(0)"></span>
+    <span class="hero-dot" onclick="goToSlide(1)"></span>
+    <span class="hero-dot" onclick="goToSlide(2)"></span>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="hero-search-wrapper">
+    <div class="hero-search-box">
+      <h5 class="text-center mb-3"><i class="fas fa-search me-2"></i>Find Your Perfect Destination</h5>
+      <form action="/destinations" method="GET" class="hero-search-form">
+        <div class="row g-2">
+          <div class="col-md-5">
+            <input type="text" name="q" class="form-control form-control-lg" placeholder="🌍 Where do you want to go?">
+          </div>
+          <div class="col-md-3">
+            <input type="date" name="date" class="form-control form-control-lg">
+          </div>
+          <div class="col-md-2">
+            <select name="guests" class="form-control form-control-lg">
+              <option value="">Guests</option>
+              <option>1 Person</option>
+              <option>2 People</option>
+              <option>3-5 People</option>
+              <option>6+ People</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary btn-lg w-100">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STATS SECTION
+     ============================================================ -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <h3 class="counter" data-target="50000">0</h3>
+          <p>Happy Travelers</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <i class="fas fa-map-marked-alt"></i>
+          <h3 class="counter" data-target="200">0</h3>
+          <p>Destinations</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <i class="fas fa-trophy"></i>
+          <h3 class="counter" data-target="15">0</h3>
+          <p>Years Experience</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <i class="fas fa-star"></i>
+          <h3>4.9</h3>
+          <p>Average Rating</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRAVEL CATEGORIES
+     ============================================================ -->
+<section class="section-padding">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Explore by Type</span>
+      <h2>What Are You Looking For?</h2>
+      <p>Choose your travel style and discover the perfect experience</p>
+    </div>
+    <div class="row g-3">
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="/destinations" class="category-card">
+          <div class="category-icon"><i class="fas fa-umbrella-beach"></i></div>
+          <span>Beaches</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="/destinations" class="category-card">
+          <div class="category-icon"><i class="fas fa-mountain"></i></div>
+          <span>Hill Stations</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="/destinations" class="category-card">
+          <div class="category-icon"><i class="fas fa-landmark"></i></div>
+          <span>Heritage</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="/destinations" class="category-card">
+          <div class="category-icon"><i class="fas fa-hiking"></i></div>
+          <span>Adventure</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="/destinations" class="category-card">
+          <div class="category-icon"><i class="fas fa-pray"></i></div>
+          <span>Spiritual</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="/destinations" class="category-card">
+          <div class="category-icon"><i class="fas fa-globe"></i></div>
+          <span>International</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURED DESTINATIONS
+     ============================================================ -->
+<section class="section-padding bg-light-custom">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Popular Picks</span>
+      <h2>Featured Destinations</h2>
+      <p>Handpicked destinations that our travelers love most</p>
+    </div>
+    <div class="row g-4">
+      <% destinations.forEach(dest => { %>
+      <div class="col-md-6 col-lg-4">
+        <div class="destination-card">
+          <div class="destination-img-wrapper">
+            <img src="<%= dest.image %>" alt="<%= dest.name %>" class="destination-img" loading="lazy">
+            <div class="destination-badge"><%= dest.country %></div>
+            <button class="wishlist-btn" onclick="toggleWishlist(this, '<%= dest.id %>', '<%= dest.name %>')" title="Add to Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+            <div class="destination-overlay">
+              <a href="/booking?destination=<%= dest.name %>" class="btn btn-light btn-sm">Book Now</a>
+            </div>
+          </div>
+          <div class="destination-info">
+            <div class="d-flex justify-content-between align-items-start mb-1">
+              <h6 class="destination-name"><%= dest.name %></h6>
+              <span class="price-badge">₹<%= dest.price.toLocaleString() %></span>
+            </div>
+            <div class="rating-row mb-2">
+              <% for(let i=0; i<5; i++) { %>
+                <i class="fas fa-star <%= i < Math.round(dest.rating) ? 'text-warning' : 'text-muted' %>"></i>
+              <% } %>
+              <span class="rating-count">(<%= dest.reviews %>)</span>
+            </div>
+            <p class="destination-desc"><%= dest.description.substring(0, 80) %>...</p>
+            <a href="/booking?destination=<%= dest.name %>" class="btn btn-primary btn-sm w-100 mt-2">
+              <i class="fas fa-calendar-check me-1"></i>Book Now
+            </a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    <div class="text-center mt-4">
+      <a href="/destinations" class="btn btn-outline-primary btn-lg">
+        View All Destinations <i class="fas fa-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     POPULAR PACKAGES
+     ============================================================ -->
+<section class="section-padding">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Best Value</span>
+      <h2>Popular Tour Packages</h2>
+      <p>All-inclusive packages curated for the best travel experience</p>
+    </div>
+    <div class="row g-4">
+      <% packages.forEach(pkg => { %>
+      <div class="col-md-6 col-lg-4">
+        <div class="package-card">
+          <div class="package-img-wrapper">
+            <img src="<%= pkg.image %>" alt="<%= pkg.name %>" loading="lazy">
+            <div class="package-type-badge"><%= pkg.type.charAt(0).toUpperCase() + pkg.type.slice(1) %></div>
+          </div>
+          <div class="package-info">
+            <h5><%= pkg.name %></h5>
+            <p class="package-destinations"><i class="fas fa-route me-1"></i><%= pkg.destinations %></p>
+            <div class="package-meta">
+              <span><i class="fas fa-clock me-1"></i><%= pkg.duration %></span>
+              <span class="package-price">₹<%= pkg.price.toLocaleString() %></span>
+            </div>
+            <ul class="package-services">
+              <% pkg.services.slice(0,3).forEach(s => { %>
+                <li><i class="fas fa-check-circle text-success me-1"></i><%= s %></li>
+              <% }) %>
+            </ul>
+            <a href="/booking?destination=<%= pkg.name %>" class="btn btn-primary w-100 mt-2">
+              <i class="fas fa-paper-plane me-1"></i>Book This Package
+            </a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    <div class="text-center mt-4">
+      <a href="/packages" class="btn btn-outline-primary btn-lg">
+        Explore All Packages <i class="fas fa-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     OFFERS BANNER
+     ============================================================ -->
+<section class="offers-section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="offer-card offer-1">
+          <div class="offer-content">
+            <h3>20% OFF</h3>
+            <p>Honeymoon Packages</p>
+            <a href="/packages" class="btn btn-light btn-sm">Grab Deal</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="offer-card offer-2">
+          <div class="offer-content">
+            <h3>Family Tour</h3>
+            <p>Starting at ₹24,999</p>
+            <a href="/packages" class="btn btn-light btn-sm">Book Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="offer-card offer-3">
+          <div class="offer-content">
+            <h3>Ladakh 2024</h3>
+            <p>Limited Slots Available!</p>
+            <a href="/booking" class="btn btn-light btn-sm">Reserve Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CUSTOMER REVIEWS
+     ============================================================ -->
+<section class="section-padding">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Testimonials</span>
+      <h2>What Our Travelers Say</h2>
+      <p>Real stories from real travelers who explored with us</p>
+    </div>
+    <% if (reviews.length > 0) { %>
+    <div class="row g-4">
+      <% reviews.slice(0,3).forEach(review => { %>
+      <div class="col-md-4">
+        <div class="review-card">
+          <div class="review-stars">
+            <% for(let i=0; i<5; i++) { %>
+              <i class="fas fa-star <%= i < parseInt(review.rating) ? 'text-warning' : 'text-muted' %>"></i>
+            <% } %>
+          </div>
+          <p class="review-comment">"<%= review.comment %>"</p>
+          <div class="review-author">
+            <div class="review-avatar"><%= review.userName.charAt(0).toUpperCase() %></div>
+            <div>
+              <strong><%= review.userName %></strong>
+              <small class="d-block text-muted"><%= review.destination %></small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    <% } else { %>
+    <div class="text-center py-5">
+      <div class="text-muted mb-3"><i class="far fa-comment-dots fa-3x"></i></div>
+      <p class="text-muted">No reviews yet. Be the first to share your experience!</p>
+    </div>
+    <% } %>
+    <div class="text-center mt-4">
+      <a href="/reviews" class="btn btn-outline-primary">Share Your Experience <i class="fas fa-arrow-right ms-2"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRAVEL TIPS SECTION
+     ============================================================ -->
+<section class="section-padding bg-light-custom">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Travel Smarter</span>
+      <h2>Travel Tips for You</h2>
+      <p>Expert advice to make your journey smoother and more enjoyable</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="tip-card">
+          <div class="tip-icon"><i class="fas fa-passport"></i></div>
+          <h5>Book in Advance</h5>
+          <p>Book your tours at least 2-3 weeks ahead to get the best prices and availability for popular destinations.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tip-card">
+          <div class="tip-icon"><i class="fas fa-shield-alt"></i></div>
+          <h5>Travel Insurance</h5>
+          <p>Always purchase travel insurance. It protects you from unexpected cancellations, medical emergencies, and trip interruptions.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tip-card">
+          <div class="tip-icon"><i class="fas fa-cloud-sun"></i></div>
+          <h5>Check Weather</h5>
+          <p>Research the best time to visit your destination. India's weather varies greatly — plan accordingly to enjoy the best experience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<%- include('partials/footer') %>
+
+<script>
+// Hero Slider
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.hero-dot');
+
+function showSlide(n) {
+  slides.forEach(s => s.classList.remove('active'));
+  dots.forEach(d => d.classList.remove('active'));
+  currentSlide = (n + slides.length) % slides.length;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+}
+function changeSlide(dir) { showSlide(currentSlide + dir); }
+function goToSlide(n) { showSlide(n); }
+setInterval(() => changeSlide(1), 5000);
+
+// Counter Animation
+function animateCounters() {
+  document.querySelectorAll('.counter').forEach(counter => {
+    const target = parseInt(counter.dataset.target);
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { counter.textContent = target.toLocaleString(); clearInterval(timer); }
+      else counter.textContent = Math.floor(current).toLocaleString();
+    }, 16);
+  });
+}
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounters(); statsObserver.disconnect(); } });
+}, { threshold: 0.5 });
+const statsSection = document.querySelector('.stats-section');
+if (statsSection) statsObserver.observe(statsSection);
+
+
+</script>

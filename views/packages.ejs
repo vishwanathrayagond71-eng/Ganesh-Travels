@@ -1,0 +1,124 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<!-- Page Hero -->
+<div class="page-hero" style="background-image: url('https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1400')">
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1><i class="fas fa-suitcase-rolling me-3"></i>Tour Packages</h1>
+    <p>All-inclusive packages designed for every type of traveler</p>
+  </div>
+</div>
+
+<section class="section-padding">
+  <div class="container">
+    <!-- Filter Bar -->
+    <div class="filter-bar mb-4">
+      <div class="filter-btns">
+        <button class="filter-btn active" data-filter="all">All Packages</button>
+        <button class="filter-btn" data-filter="family">Family</button>
+        <button class="filter-btn" data-filter="honeymoon">Honeymoon</button>
+        <button class="filter-btn" data-filter="adventure">Adventure</button>
+        <button class="filter-btn" data-filter="solo">Solo</button>
+        <button class="filter-btn" data-filter="group">Group</button>
+        <button class="filter-btn" data-filter="international">International</button>
+      </div>
+    </div>
+
+    <div class="row g-4" id="packagesGrid">
+      <% packages.forEach(pkg => { %>
+      <div class="col-md-6 col-lg-4 pkg-item" data-type="<%= pkg.type %>">
+        <div class="package-card-full">
+          <div class="pkg-img-wrapper">
+            <img src="<%= pkg.image %>" alt="<%= pkg.name %>" loading="lazy">
+            <div class="pkg-overlay">
+              <div class="pkg-badge"><%= pkg.type.charAt(0).toUpperCase() + pkg.type.slice(1) %></div>
+              <div class="pkg-rating">
+                <% for(let i=0; i<5; i++) { %>
+                  <i class="fas fa-star <%= i < Math.round(pkg.rating) ? 'text-warning' : 'text-muted' %>" style="font-size:11px"></i>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <div class="pkg-body">
+            <h5 class="pkg-title"><%= pkg.name %></h5>
+            <p class="pkg-route"><i class="fas fa-route me-1 text-primary"></i><%= pkg.destinations %></p>
+            <div class="pkg-stats">
+              <span><i class="fas fa-clock me-1 text-muted"></i><%= pkg.duration %></span>
+              <span class="pkg-price">₹<%= pkg.price.toLocaleString() %><small>/person</small></span>
+            </div>
+            <div class="pkg-services-list">
+              <h6 class="mb-2">What's Included:</h6>
+              <ul>
+                <% pkg.services.forEach(s => { %>
+                <li><i class="fas fa-check-circle text-success me-2"></i><%= s %></li>
+                <% }) %>
+              </ul>
+            </div>
+            <div class="pkg-actions">
+              <a href="/booking?destination=<%= encodeURIComponent(pkg.name) %>" class="btn btn-primary w-100">
+                <i class="fas fa-calendar-check me-2"></i>Book This Package
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="section-padding bg-light-custom">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Why Us?</span>
+      <h2>Why Choose Ganesh Travels?</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-3 col-6">
+        <div class="why-card">
+          <i class="fas fa-award"></i>
+          <h6>15+ Years Experience</h6>
+          <p>Trusted by thousands of Indian families</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="why-card">
+          <i class="fas fa-headset"></i>
+          <h6>24/7 Support</h6>
+          <p>We're always here when you need us</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="why-card">
+          <i class="fas fa-rupee-sign"></i>
+          <h6>Best Price Guarantee</h6>
+          <p>No hidden charges, transparent pricing</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="why-card">
+          <i class="fas fa-shield-alt"></i>
+          <h6>Safe Travel</h6>
+          <p>Your safety is our top priority</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const filter = this.dataset.filter;
+    document.querySelectorAll('.pkg-item').forEach(item => {
+      item.style.display = (filter === 'all' || item.dataset.type === filter) ? 'block' : 'none';
+    });
+  });
+});
+</script>
