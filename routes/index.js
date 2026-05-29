@@ -332,8 +332,13 @@ router.get('/admin/login', redirectIfAdminLoggedIn, (req, res) => {
 // Admin Login (POST)
 router.post('/admin/login', redirectIfAdminLoggedIn, (req, res) => {
   const { email, password } = req.body;
-  const adminEmail = process.env.ADMIN_EMAIL || 'xyz7@gmail.com';
-  const adminPassword = process.env.ADMIN_PASSWORD || '1234';
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    req.flash('error', 'Admin credentials are not configured on the server.');
+    return res.redirect('/admin/login');
+  }
 
   const cleanEmail = email ? email.trim().toLowerCase() : '';
   const cleanAdmin = adminEmail.trim().toLowerCase();
