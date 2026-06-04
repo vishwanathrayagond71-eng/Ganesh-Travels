@@ -1,0 +1,750 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<!-- Include Leaflet.js CDN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+  /* Full viewport split screen layout */
+  .explore-wrapper {
+    display: flex;
+    height: calc(100vh - 72px); /* Subtract navbar height */
+    overflow: hidden;
+    position: relative;
+  }
+
+  .explore-sidebar {
+    width: 400px;
+    height: 100%;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .explore-map-container {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  #map {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Sidebar styling */
+  .sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-light);
+  }
+
+  .sidebar-header h4 {
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-header p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0 0 15px 0;
+  }
+
+  .gps-status-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+  }
+
+  .gps-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffc107; /* Orange / Waiting */
+  }
+
+  .status-dot.active {
+    background: var(--success-color);
+    box-shadow: 0 0 8px var(--success-color);
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.5; }
+  }
+
+  .category-filters {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-card);
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .category-filters::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .cat-btn {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border-color);
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    white-space: nowrap;
+    transition: var(--transition);
+  }
+
+  .cat-btn.active, .cat-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+  }
+
+  /* List items */
+  .poi-list-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+  }
+
+  .poi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .poi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-light);
+  }
+
+  .poi-card.active-card {
+    border-left: 4px solid var(--accent-color);
+    background: var(--bg-light);
+  }
+
+  .poi-card-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .poi-card-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .poi-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .poi-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 0.75rem;
+  }
+
+  .poi-badge {
+    text-transform: capitalize;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+
+  .badge-temple { background: rgba(233, 196, 106, 0.2); color: #b58900; }
+  .badge-tourist { background: rgba(29, 53, 87, 0.1); color: var(--primary-color); }
+  .badge-restaurant { background: rgba(230, 57, 70, 0.1); color: var(--danger-color); }
+  .badge-hotel, .badge-lodge { background: rgba(42, 157, 143, 0.1); color: var(--success-color); }
+  .badge-falls { background: rgba(0, 180, 216, 0.1); color: #0077b6; }
+
+  .poi-distance {
+    font-weight: 700;
+    color: var(--primary-light);
+  }
+
+  .poi-card-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Custom Popup Map style */
+  .leaflet-popup-content-wrapper {
+    border-radius: var(--radius-md);
+    padding: 0;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+  }
+
+  .leaflet-popup-content {
+    margin: 0;
+    width: 250px !important;
+  }
+
+  .map-popup-card {
+    font-family: var(--font-main);
+  }
+
+  .map-popup-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+  }
+
+  .map-popup-body {
+    padding: 12px;
+  }
+
+  .map-popup-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 0 0 6px 0;
+    color: var(--text-dark);
+  }
+
+  .map-popup-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+  }
+
+  .map-popup-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+  }
+
+  /* Geolocation pulsing blue dot */
+  .pulsing-blue-dot {
+    background-color: #3b82f6;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
+    position: relative;
+  }
+
+  .pulsing-blue-dot::after {
+    content: '';
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    top: -11px;
+    left: -11px;
+    border: 2px solid #3b82f6;
+    opacity: 0;
+    animation: pulse-ring 1.8s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { opacity: 0.4; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+
+  @media(max-width: 768px) {
+    .explore-wrapper {
+      flex-direction: column-reverse;
+      height: calc(100vh - 56px);
+    }
+
+    .explore-sidebar {
+      width: 100%;
+      height: 50%;
+    }
+
+    .explore-map-container {
+      height: 50%;
+    }
+  }
+</style>
+
+<div class="explore-wrapper">
+  <!-- Sidebar Panel -->
+  <div class="explore-sidebar">
+    <div class="sidebar-header">
+      <h4><i class="fas fa-map-marked-alt text-warning"></i>Explore Guide</h4>
+      <p>Navigate all nearby tourist spots, temples, and eateries</p>
+
+      <!-- Geolocation Tracker Status -->
+      <div class="gps-status-box">
+        <div class="gps-indicator">
+          <div class="status-dot" id="gpsDot"></div>
+          <span id="gpsText">GPS Inactive</span>
+        </div>
+        <button class="btn btn-primary btn-sm px-3" onclick="locateUser()" title="Locate current GPS position">
+          <i class="fas fa-location-crosshairs me-1"></i>Locate Me
+        </button>
+      </div>
+
+      <!-- Interested Starting Point -->
+      <div class="mb-3">
+        <label class="form-label text-muted mb-1" style="font-size:0.72rem; font-weight:700; text-transform:uppercase;">Select Interested Location:</label>
+        <select class="form-select form-select-sm" id="startingPointSelect" onchange="setStartingPoint(this.value)" style="border-radius: var(--radius-sm); border: 1.5px solid var(--border-color); font-family: var(--font-main);">
+          <option value="">-- Click on map OR choose below --</option>
+          <option value="16.1812,75.6983">📍 Vidyagiri Office (Bagalkote)</option>
+          <option value="15.9189,75.6791">📍 Badami Cave Temples</option>
+          <option value="15.9491,75.8197">📍 Pattadakal Monument Group</option>
+          <option value="16.3323,75.8890">📍 Almatti Dam & Gardens</option>
+          <option value="27.1751,78.0421">📍 Taj Mahal (Agra)</option>
+          <option value="15.5782,73.7422">📍 Anjuna Beach (Goa)</option>
+        </select>
+        
+        <!-- Very Nearby Toggle -->
+        <div class="form-check form-switch mt-2" id="nearbyToggleWrapper" style="display: none;">
+          <input class="form-check-input" type="checkbox" id="nearbyOnlyToggle" onchange="filterListAndMap()">
+          <label class="form-check-label text-muted" for="nearbyOnlyToggle" style="font-size: 0.75rem; font-weight: 600;">Show only very nearby (&lt; 10 km)</label>
+        </div>
+      </div>
+
+      <!-- Search Input -->
+      <div class="search-input-wrapper">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="poiSearch" class="form-control search-input" placeholder="Search places, temples...">
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-filters">
+      <button class="cat-btn active" data-cat="all">All</button>
+      <button class="cat-btn" data-cat="tourist">🏰 Places</button>
+      <button class="cat-btn" data-cat="temple">🛕 Temples</button>
+      <button class="cat-btn" data-cat="restaurant">🍔 Dining</button>
+      <button class="cat-btn" data-cat="lodge">🏨 Lodges</button>
+      <button class="cat-btn" data-cat="falls">🌊 Waterfalls</button>
+    </div>
+
+    <!-- POI Cards List -->
+    <div class="poi-list-container" id="poiList">
+      <!-- Cards will render dynamically -->
+    </div>
+  </div>
+
+  <!-- Fullscreen Map Container -->
+  <div class="explore-map-container">
+    <div id="map"></div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<!-- Leaflet JavaScript library -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  // Bind dynamic server payload containing POIs
+  const rawPois = <%- JSON.stringify(pois) %>;
+  let userCoords = null;
+  let activePoiId = null;
+  let map, userMarker, userCircle;
+  let markers = {};
+
+  // Setup Leaflet Map
+  document.addEventListener('DOMContentLoaded', () => {
+    // Default view: Vidyagiri, Bagalkote, Karnataka
+    const defaultCenter = [16.1812, 75.6983];
+    map = L.map('map', {
+      zoomControl: false // Position zoom control on bottom right instead
+    }).setView(defaultCenter, 13);
+
+    L.control.zoom({
+      position: 'bottomright'
+    }).addTo(map);
+
+    // Standard high-quality OSM tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Plot POIs onto the map
+    renderMapMarkers(rawPois);
+
+    // Initial render of sidebar list
+    updateSidebarList(rawPois);
+
+    // Set search listener
+    document.getElementById('poiSearch').addEventListener('input', filterListAndMap);
+
+    // Set category buttons listener
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        filterListAndMap();
+      });
+    });
+
+    // Map Click handler to set starting point of interest
+    map.on('click', (e) => {
+      const lat = e.latlng.lat;
+      const lng = e.latlng.lng;
+      userCoords = { lat, lng };
+
+      document.getElementById('startingPointSelect').value = ""; // Reset select option
+
+      const gpsDot = document.getElementById('gpsDot');
+      const gpsText = document.getElementById('gpsText');
+      gpsDot.classList.add('active');
+      gpsText.textContent = 'GPS Set (Map Click)';
+      document.getElementById('nearbyToggleWrapper').style.display = 'block';
+
+      updateUserMarker(lat, lng, 'Interested Starting Point');
+      filterListAndMap();
+    });
+  });
+
+  // Category Icon & Color Mapping
+  function getMarkerStyles(category) {
+    switch (category) {
+      case 'temple':
+        return { color: '#e9c46a', iconClass: 'fa-dharma-wheel' }; // Gold
+      case 'tourist':
+        return { color: '#1d3557', iconClass: 'fa-monument' }; // Dark Blue
+      case 'restaurant':
+        return { color: '#e63946', iconClass: 'fa-utensils' }; // Red
+      case 'hotel':
+      case 'lodge':
+        return { color: '#2a9d8f', iconClass: 'fa-hotel' }; // Green
+      case 'falls':
+        return { color: '#00b4d8', iconClass: 'fa-water' }; // Light Blue
+      default:
+        return { color: '#9b5de5', iconClass: 'fa-map-pin' }; // Violet
+    }
+  }
+
+  // Generate Marker Pins
+  function renderMapMarkers(pois) {
+    // Remove any existing markers
+    for (let id in markers) {
+      map.removeLayer(markers[id]);
+    }
+    markers = {};
+
+    pois.forEach(poi => {
+      const lat = parseFloat(poi.lat);
+      const lng = parseFloat(poi.lng);
+      if (isNaN(lat) || isNaN(lng)) return;
+
+      const style = getMarkerStyles(poi.category);
+
+      // Custom HTML Marker using FontAwesome
+      const customHtmlIcon = L.divIcon({
+        html: `<div style="background-color: ${style.color}; width: 34px; height: 34px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3)">
+                <i class="fas ${style.iconClass}" style="color: white; font-size: 14px; transform: rotate(45deg)"></i>
+               </div>`,
+        className: 'custom-map-pin',
+        iconSize: [34, 34],
+        iconAnchor: [17, 34]
+      });
+
+      // Construct popup HTML
+      let ratingStars = '';
+      const valRating = Math.round(parseFloat(poi.rating) || 5);
+      for (let i = 0; i < 5; i++) {
+        ratingStars += `<i class="fas fa-star ${i < valRating ? 'text-warning' : 'text-muted'}" style="font-size: 11px"></i>`;
+      }
+
+      const popupHtml = `
+        <div class="map-popup-card">
+          <img src="${poi.image || 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600'}" class="map-popup-img" alt="${poi.name}">
+          <div class="map-popup-body">
+            <h6 class="map-popup-title">${poi.name}</h6>
+            <div class="map-popup-meta">
+              <span class="poi-badge badge-${poi.category}">${poi.category}</span>
+              <div class="d-flex align-items-center gap-1">${ratingStars}</div>
+            </div>
+            <p class="map-popup-desc">${poi.description}</p>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" class="btn btn-primary btn-sm w-100 text-white mt-1">
+              <i class="fas fa-directions me-1"></i>Get Directions
+            </a>
+          </div>
+        </div>
+      `;
+
+      // Plot
+      const m = L.marker([lat, lng], { icon: customHtmlIcon })
+        .bindPopup(popupHtml, { closeButton: false })
+        .on('click', () => {
+          selectPoiCard(poi.id);
+        });
+
+      m.addTo(map);
+      markers[poi.id] = m;
+    });
+  }
+
+  // Highlight POI list item on marker click
+  function selectPoiCard(id) {
+    activePoiId = id;
+    document.querySelectorAll('.poi-card').forEach(card => {
+      card.classList.remove('active-card');
+      if (card.dataset.id === id) {
+        card.classList.add('active-card');
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  }
+
+  // Update Sidebar POIs List
+  function updateSidebarList(pois) {
+    const listContainer = document.getElementById('poiList');
+    if (pois.length === 0) {
+      listContainer.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-map-marked-alt text-muted"></i>
+          <p class="mt-2 text-muted">No locations match your query.</p>
+        </div>`;
+      return;
+    }
+
+    // Sort by distance if GPS is active
+    let sortedPois = [...pois];
+    if (userCoords) {
+      sortedPois.forEach(p => {
+        p.distValue = calculateDistance(userCoords.lat, userCoords.lng, parseFloat(p.lat), parseFloat(p.lng));
+        p.distanceText = p.distValue.toFixed(1) + ' km away';
+      });
+      sortedPois.sort((a, b) => a.distValue - b.distValue);
+    } else {
+      sortedPois.forEach(p => {
+        p.distanceText = '--';
+      });
+    }
+
+    listContainer.innerHTML = sortedPois.map(poi => {
+      const activeClass = poi.id === activePoiId ? 'active-card' : '';
+      let ratingStars = '';
+      const valRating = Math.round(parseFloat(poi.rating) || 5);
+      for (let i = 0; i < 5; i++) {
+        ratingStars += `<i class="fas fa-star ${i < valRating ? 'text-warning' : 'text-muted'}" style="font-size:10px"></i>`;
+      }
+
+      return `
+        <div class="poi-card ${activeClass}" data-id="${poi.id}" onclick="focusPoi('${poi.id}', ${poi.lat}, ${poi.lng})">
+          <img src="${poi.image || 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600'}" class="poi-card-img" alt="${poi.name}">
+          <div class="poi-card-info">
+            <h6 class="poi-card-title">${poi.name}</h6>
+            <div class="poi-card-meta">
+              <span class="poi-badge badge-${poi.category}">${poi.category}</span>
+              ${userCoords ? `<span class="poi-distance"><i class="fas fa-location-dot me-1"></i>${poi.distanceText}</span>` : ''}
+            </div>
+            <div class="mb-1">${ratingStars}</div>
+            <p class="poi-card-desc">${poi.description}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Click handler for Sidebar POIs
+  function focusPoi(id, lat, lng) {
+    activePoiId = id;
+    selectPoiCard(id);
+    if (markers[id]) {
+      map.setView([lat, lng], 15);
+      markers[id].openPopup();
+    }
+  }
+
+  // Filter functionality
+  function filterListAndMap() {
+    const query = document.getElementById('poiSearch').value.toLowerCase().trim();
+    const cat = document.querySelector('.cat-btn.active').dataset.cat;
+
+    const nearbyOnly = document.getElementById('nearbyOnlyToggle').checked;
+
+    const filtered = rawPois.filter(poi => {
+      const matchSearch = poi.name.toLowerCase().includes(query) || 
+                          poi.description.toLowerCase().includes(query) ||
+                          poi.address.toLowerCase().includes(query);
+      const matchCat = cat === 'all' || poi.category === cat;
+      
+      let matchDistance = true;
+      if (nearbyOnly && userCoords) {
+        const dist = calculateDistance(userCoords.lat, userCoords.lng, parseFloat(poi.lat), parseFloat(poi.lng));
+        matchDistance = dist <= 10; // Within 10 km
+      }
+
+      return matchSearch && matchCat && matchDistance;
+    });
+
+    renderMapMarkers(filtered);
+    updateSidebarList(filtered);
+  }
+
+  // Update user pin on map
+  function updateUserMarker(lat, lng, label, accuracy = 0) {
+    const userIcon = L.divIcon({
+      html: `<div class="pulsing-blue-dot"></div>`,
+      className: 'user-gps-pin',
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+
+    if (userMarker) map.removeLayer(userMarker);
+    if (userCircle) map.removeLayer(userCircle);
+
+    // Plot accuracy radius ring only if browser GPS returned a real accuracy > 0
+    if (accuracy > 0) {
+      userCircle = L.circle([lat, lng], {
+        radius: accuracy,
+        color: '#3b82f6',
+        fillColor: '#3b82f6',
+        fillOpacity: 0.15,
+        weight: 1
+      }).addTo(map);
+    }
+
+    userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(map);
+    userMarker.bindPopup(`<b>${label}</b><br><span style="font-size:10px">${lat.toFixed(4)}, ${lng.toFixed(4)}</span>`).openPopup();
+  }
+
+  // Geolocation trigger
+  function locateUser() {
+    const gpsDot = document.getElementById('gpsDot');
+    const gpsText = document.getElementById('gpsText');
+
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+
+    gpsText.textContent = 'Locating...';
+    gpsDot.style.backgroundColor = '#ffc107';
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const accuracy = position.coords.accuracy;
+        userCoords = { lat, lng };
+
+        gpsDot.classList.add('active');
+        gpsText.textContent = 'GPS Active';
+        document.getElementById('nearbyToggleWrapper').style.display = 'block';
+
+        updateUserMarker(lat, lng, 'Your Current Location', accuracy);
+
+        // Fit map bounds to show both user and nearby spots
+        const group = userCircle ? new L.featureGroup([userMarker, userCircle]) : new L.featureGroup([userMarker]);
+        map.fitBounds(group.getBounds().pad(0.1));
+
+        // Re-render sidebar to calculate distances
+        filterListAndMap();
+      },
+      (error) => {
+        console.error('[GPS Error]', error);
+        gpsText.textContent = 'GPS Error';
+        gpsDot.style.backgroundColor = 'var(--danger-color)';
+        alert('Failed to fetch your GPS coordinates. Please ensure location services are enabled.');
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+
+  // Select Starting Point dropdown option
+  function setStartingPoint(val) {
+    if (!val) {
+      // Reset coordinates
+      userCoords = null;
+      if (userMarker) map.removeLayer(userMarker);
+      if (userCircle) map.removeLayer(userCircle);
+      const gpsDot = document.getElementById('gpsDot');
+      const gpsText = document.getElementById('gpsText');
+      gpsDot.classList.remove('active');
+      gpsText.textContent = 'GPS Inactive';
+      document.getElementById('nearbyToggleWrapper').style.display = 'none';
+      document.getElementById('nearbyOnlyToggle').checked = false;
+      filterListAndMap();
+      return;
+    }
+
+    const [latStr, lngStr] = val.split(',');
+    const lat = parseFloat(latStr);
+    const lng = parseFloat(lngStr);
+    userCoords = { lat, lng };
+
+    const gpsDot = document.getElementById('gpsDot');
+    const gpsText = document.getElementById('gpsText');
+    gpsDot.classList.add('active');
+    gpsText.textContent = 'GPS Set (Interest)';
+    document.getElementById('nearbyToggleWrapper').style.display = 'block';
+
+    updateUserMarker(lat, lng, 'Interested Location');
+    map.setView([lat, lng], 14);
+
+    // Re-calculate distances and sort list
+    filterListAndMap();
+  }
+
+  // Haversine formula calculation (spherical trigonometry for coordinates)
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+</script>

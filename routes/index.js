@@ -78,6 +78,17 @@ router.get('/destinations', (req, res) => {
   res.render('destinations', { title: 'Destinations - Ganesh Travels', user: req.session.user || null, destinations, messages: req.flash() });
 });
 
+// Explore GPS Map Page
+router.get('/explore', async (req, res) => {
+  try {
+    const pois = await excel.readData('pois');
+    res.render('explore', { title: 'Explore GPS - Ganesh Travels', user: req.session.user || null, pois, messages: req.flash() });
+  } catch (err) {
+    console.error('[Explore Route Error]:', err);
+    res.render('explore', { title: 'Explore GPS - Ganesh Travels', user: req.session.user || null, pois: [], messages: req.flash() });
+  }
+});
+
 // Packages Page
 router.get('/packages', (req, res) => {
   res.render('packages', { title: 'Tour Packages - Ganesh Travels', user: req.session.user || null, packages, messages: req.flash() });
@@ -367,6 +378,7 @@ router.get('/admin/dashboard', requireAdmin, async (req, res) => {
     const newsletter = await excel.readData('newsletter');
     const settings = await excel.readData('settings');
     const team = await excel.readData('team');
+    const pois = await excel.readData('pois');
     
     // Find settings variables
     const phoneSetting = settings.find(s => s.key === 'contact_phone');
@@ -377,7 +389,7 @@ router.get('/admin/dashboard', requireAdmin, async (req, res) => {
     res.render('admin-dashboard', {
       title: 'Admin Dashboard - Ganesh Travels',
       admin: req.session.admin,
-      users, bookings, reviews, contacts, newsletter, settings, team,
+      users, bookings, reviews, contacts, newsletter, settings, team, pois,
       currentPhone, currentEmail,
       messages: req.flash()
     });
@@ -444,11 +456,42 @@ router.post('/admin/team/add', requireAdmin, async (req, res) => {
   }
 });
 
+// Admin Add Point of Interest (POI)
+router.post('/admin/pois/add', requireAdmin, async (req, res) => {
+  try {
+    const { name, category, lat, lng, description, address, rating, image } = req.body;
+    if (!name || !category || !lat || !lng) {
+      req.flash('error', 'Name, Category, Latitude and Longitude are required.');
+      return res.redirect('/admin/dashboard');
+    }
+    
+    await excel.addRow('pois', {
+      id: uuidv4(),
+      name,
+      category,
+      lat: String(lat).trim(),
+      lng: String(lng).trim(),
+      description: description || '',
+      address: address || '',
+      rating: rating || '5.0',
+      image: image || 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600',
+      createdAt: new Date().toLocaleString()
+    });
+    
+    req.flash('success', 'Point of Interest added successfully!');
+    res.redirect('/admin/dashboard');
+  } catch (err) {
+    console.error('[Add POI Error]:', err);
+    req.flash('error', 'Failed to add point of interest.');
+    res.redirect('/admin/dashboard');
+  }
+});
+
 // Admin Delete Record
 router.post('/admin/delete/:sheet/:id', requireAdmin, async (req, res) => {
   try {
     const { sheet, id } = req.params;
-    const validSheets = ['users', 'bookings', 'reviews', 'contacts', 'newsletter', 'settings', 'team'];
+    const validSheets = ['users', 'bookings', 'reviews', 'contacts', 'newsletter', 'settings', 'team', 'pois'];
     if (!validSheets.includes(sheet)) {
       req.flash('error', 'Invalid sheet name.');
       return res.redirect('/admin/dashboard');
@@ -466,7 +509,7 @@ router.post('/admin/delete/:sheet/:id', requireAdmin, async (req, res) => {
 // Admin Download Excel File
 router.get('/admin/download/:sheet', requireAdmin, async (req, res) => {
   const { sheet } = req.params;
-  const validSheets = ['users', 'bookings', 'reviews', 'contacts', 'newsletter', 'settings', 'team'];
+  const validSheets = ['users', 'bookings', 'reviews', 'contacts', 'newsletter', 'settings', 'team', 'pois'];
   if (!validSheets.includes(sheet)) {
     req.flash('error', 'Invalid file.');
     return res.redirect('/admin/dashboard');

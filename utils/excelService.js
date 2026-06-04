@@ -26,7 +26,8 @@ const SHEET_HEADERS = {
   contacts: ['id', 'name', 'email', 'subject', 'message', 'createdAt'],
   newsletter: ['id', 'email', 'createdAt'],
   settings: ['key', 'value', 'createdAt'],
-  team: ['id', 'name', 'role', 'image', 'createdAt']
+  team: ['id', 'name', 'role', 'image', 'createdAt'],
+  pois: ['id', 'name', 'category', 'lat', 'lng', 'description', 'address', 'rating', 'image', 'createdAt']
 };
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -131,6 +132,189 @@ async function initAllSheets() {
       await addRow('settings', { key: 'contact_email', value: 'xyz7@gmail.com', createdAt: new Date().toLocaleString() });
     }
     console.log('✅ Excel sheets initialized successfully (Local Mode)');
+  }
+
+  // Seed default POIs if empty
+  try {
+    const pois = await readData('pois');
+    if (!pois || pois.length === 0) {
+      const defaultPois = [
+        {
+          id: 'poi-1',
+          name: 'Basaveshwar Temple, Vidyagiri',
+          category: 'temple',
+          lat: '16.1812',
+          lng: '75.6983',
+          description: 'A serene and sacred temple dedicated to Lord Basaveshwara, situated in Vidyagiri, Bagalkote.',
+          address: 'Vidyagiri, Bagalkote, Karnataka',
+          rating: '4.8',
+          image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-2',
+          name: 'Badami Cave Temples',
+          category: 'tourist',
+          lat: '15.9189',
+          lng: '75.6791',
+          description: 'Magnificent rock-cut temples carved out of sandstone hills, dating back to the Chalukya dynasty in the 6th century.',
+          address: 'Badami, Bagalkote District, Karnataka',
+          rating: '4.9',
+          image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-3',
+          name: 'Pattadakal Temple Complex',
+          category: 'temple',
+          lat: '15.9491',
+          lng: '75.8197',
+          description: 'A UNESCO World Heritage Site featuring a harmonious blend of North and South Indian temple architectures.',
+          address: 'Pattadakal, Bagalkote District, Karnataka',
+          rating: '4.8',
+          image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-4',
+          name: 'Aihole Durga Temple',
+          category: 'tourist',
+          lat: '16.0211',
+          lng: '75.8828',
+          description: 'Famous as the "Cradle of Indian Temple Architecture", Aihole features a unique Durga temple.',
+          address: 'Aihole, Bagalkote District, Karnataka',
+          rating: '4.7',
+          image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-5',
+          name: 'Vidyagiri Food Junction',
+          category: 'restaurant',
+          lat: '16.1834',
+          lng: '75.6961',
+          description: 'A popular local dining spot offering authentic North Karnataka meals, jolada rotti, and continental options.',
+          address: 'Main Road, Vidyagiri, Bagalkote, Karnataka',
+          rating: '4.5',
+          image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-6',
+          name: 'Almatti Dam & Rock Gardens',
+          category: 'tourist',
+          lat: '16.3323',
+          lng: '75.8890',
+          description: 'A major hydroelectric project on the Krishna River, featuring beautifully landscaped gardens and musical fountains.',
+          address: 'Almatti, Bagalkote District, Karnataka',
+          rating: '4.6',
+          image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-7',
+          name: 'Taj Mahal, Agra',
+          category: 'tourist',
+          lat: '27.1751',
+          lng: '78.0421',
+          description: 'One of the Seven Wonders of the World — a magnificent ivory-white marble mausoleum on the south bank of Yamuna river.',
+          address: 'Agra, Uttar Pradesh',
+          rating: '4.9',
+          image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-8',
+          name: 'Grand Kaveri Veg Restaurant',
+          category: 'restaurant',
+          lat: '16.1805',
+          lng: '75.6970',
+          description: 'Excellent multi-cuisine family restaurant specializing in South Indian breakfast and authentic North Karnataka thalis.',
+          address: 'Sector 10, Vidyagiri, Bagalkote, Karnataka',
+          rating: '4.6',
+          image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-9',
+          name: 'Spice Garden Bar & Restaurant',
+          category: 'restaurant',
+          lat: '16.1840',
+          lng: '75.6990',
+          description: 'A popular family eatery serving spicy Mughlai, Chinese, and Tandoori chicken starters in Vidyagiri.',
+          address: 'Club Road, Vidyagiri, Bagalkote, Karnataka',
+          rating: '4.3',
+          image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-10',
+          name: 'Kalyan Heritage Hotel & Lodge',
+          category: 'lodge',
+          lat: '16.1825',
+          lng: '75.6945',
+          description: 'Comfortable premium rooms, standard lodges, and guest suites with modern amenities, room service, and ample parking.',
+          address: 'Vidyagiri Main Road, Bagalkote, Karnataka',
+          rating: '4.5',
+          image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-11',
+          name: 'Hotel BG Palace & Lodge',
+          category: 'lodge',
+          lat: '16.1850',
+          lng: '75.7020',
+          description: 'Budget-friendly AC and Non-AC lodging accommodation ideal for families and travelers visiting Bagalkote.',
+          address: 'Near Navanagar Gate, Vidyagiri, Bagalkote, Karnataka',
+          rating: '4.2',
+          image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-12',
+          name: 'Heritage Lodge & Resort Badami',
+          category: 'lodge',
+          lat: '15.9120',
+          lng: '75.6830',
+          description: 'Relaxing resort style cottages and traditional suites, located within 1 km of the historic Badami cave temples.',
+          address: 'Station Road, Badami, Karnataka',
+          rating: '4.7',
+          image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-13',
+          name: 'Gokak Waterfalls',
+          category: 'falls',
+          lat: '16.1894',
+          lng: '74.8317',
+          description: 'A beautiful waterfall resembling Niagara Falls, formed by the Ghataprabha River dropping 52 meters over sandstone cliffs.',
+          address: 'Gokak, Belagavi District, Karnataka',
+          rating: '4.8',
+          image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600',
+          createdAt: new Date().toLocaleString()
+        },
+        {
+          id: 'poi-14',
+          name: 'Sogal Someshwar Waterfalls',
+          category: 'falls',
+          lat: '15.7833',
+          lng: '75.0500',
+          description: 'A scenic hill side waterfall cascading near the ancient Someshwar Temple, ideal for weekend nature trips.',
+          address: 'Sogal, Belagavi District, Karnataka',
+          rating: '4.5',
+          image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600',
+          createdAt: new Date().toLocaleString()
+        }
+      ];
+      for (const p of defaultPois) {
+        await addRow('pois', p);
+      }
+      console.log('✅ Seeded default points of interest (POIs) successfully.');
+    }
+  } catch (err) {
+    console.error('Failed to seed default POIs:', err);
   }
 }
 
