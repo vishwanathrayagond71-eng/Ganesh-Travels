@@ -7,23 +7,23 @@
 const chatResponses = {
   'best destinations in india': '🇮🇳 Our top Indian destinations are:\n• Taj Mahal, Agra\n• Kerala Backwaters\n• Ladakh\n• Goa Beaches\n• Manali, Himachal\n• Jaipur, Rajasthan\nCheck our <a href="/destinations" style="color:#e9c46a">Destinations page</a> for more!',
   
-  'what are your tour packages': '📦 We offer:\n• Family Packages\n• Honeymoon Specials\n• Adventure Trips\n• Solo Getaways\n• Group Tours\n• International Tours\nVisit our <a href="/packages" style="color:#e9c46a">Packages page</a> to explore!',
+  'what are your tour packages': '📦 We offer:\n• Family Packages\n• Honeymoon Specials\n• Adventure Trips\n• Solo Getaways\n• Group Tours\n• Heritage & Pilgrimage Tours\nVisit our <a href="/packages" style="color:#e9c46a">Packages page</a> to explore!',
   
   'how to book a tour': '📅 Booking is easy! Just:\n1. Go to our <a href="/booking" style="color:#e9c46a">Booking page</a>\n2. Select your destination & dates\n3. Enter your details\n4. Click "Confirm Booking"\nWe\'ll confirm via email within 24 hours! ✅',
   
   'cancellation policy': `❌ Our cancellation policy:\n• Free cancellation within 24 hours\n• 7+ days before: 75% refund\n• Within 7 days: No refund\nContact us for special cases at ${window.contactEmail || 'xyz7@gmail.com'}`,
   
-  'price': '💰 Our prices start from:\n• Budget trips: ₹7,999/person\n• Family packages: ₹24,999\n• Honeymoon: ₹34,999\n• International: ₹54,999+\nCheck our <a href="/packages" style="color:#e9c46a">Packages</a> for exact pricing!',
+  'price': '💰 Our prices start from:\n• Budget trips: ₹5,999/person\n• Family packages: ₹12,999\n• Honeymoon: ₹19,999\n• Premium tours: ₹24,999+\nCheck our <a href="/packages" style="color:#e9c46a">Packages</a> for exact pricing!',
   
   'contact': `📞 Reach us at:\n• Phone: ${window.contactPhone || '+91 98765 43210'}\n• Email: ${window.contactEmail || 'xyz7@gmail.com'}\n• Office: Ganesh Travels, Vidyagiri, Bagalkote, Karnataka\n• Hours: Mon-Sat 9AM-7PM\nOr visit our <a href="/contact" style="color:#e9c46a">Contact page</a>!`,
   
-  'goa': '🌊 Goa is fantastic! Our Goa package includes:\n• Boutique hotel stay\n• Beach activities\n• Scooter rental\n• City tour\n• Starting from ₹18,999\n<a href="/booking?destination=Goa Beaches" style="color:#e9c46a">Book Goa Now →</a>',
+  'goa': '🌊 Goa is fantastic! Our Goa package includes:\n• Boutique hotel stay\n• Beach activities\n• Scooter rental\n• City tour\n• Starting from ₹12,999\n<a href="/booking?destination=Goa Beaches" style="color:#e9c46a">Book Goa Now →</a>',
   
-  'ladakh': '🏔️ Ladakh is breathtaking! Package includes:\n• Camp & hotel stays\n• Bike rental option\n• Nubra Valley & Pangong Lake\n• Expert adventure guide\n• Starting from ₹44,999\n<a href="/booking?destination=Ladakh" style="color:#e9c46a">Book Ladakh Now →</a>',
+  'ladakh': '🏔️ Ladakh is breathtaking! Package includes:\n• Camp & hotel stays\n• Bike rental option\n• Nubra Valley & Pangong Lake\n• Expert adventure guide\n• Starting from ₹24,999\n<a href="/booking?destination=Ladakh" style="color:#e9c46a">Book Ladakh Now →</a>',
   
-  'kerala': '🌿 Kerala — God\'s Own Country! Includes:\n• Houseboat stay in Alleppey\n• Munnar hill station visit\n• Thekkady wildlife\n• Starting from ₹34,999\n<a href="/booking?destination=Kerala Backwaters" style="color:#e9c46a">Book Kerala Now →</a>',
+  'kerala': '🌿 Kerala — God\'s Own Country! Includes:\n• Houseboat stay in Alleppey\n• Munnar hill station visit\n• Thekkady wildlife\n• Starting from ₹16,999\n<a href="/booking?destination=Kerala Backwaters" style="color:#e9c46a">Book Kerala Now →</a>',
   
-  'international': '🌍 Popular international destinations:\n• Bali, Indonesia — ₹54,999\n• Dubai, UAE — ₹79,999\n• Paris, France — ₹89,999\n• Maldives — ₹1,29,999\n<a href="/destinations" style="color:#e9c46a">Explore International Tours →</a>',
+  'domestic': '🇮🇳 Popular Indian destinations:\n• Taj Mahal, Agra — ₹8,999\n• Manali, Himachal — ₹14,999\n• Jaipur, Rajasthan — ₹9,999\n• Coorg, Karnataka — ₹7,999\n<a href="/destinations" style="color:#e9c46a">Explore All Domestic Tours →</a>',
 
   'hello': `👋 Hello! Welcome to Ganesh Travels! I'm your travel assistant. How can I help you plan your dream vacation? You can ask me about destinations, packages, pricing, or how to book! 😊`,
   
@@ -121,7 +121,9 @@ function getBotResponse(message) {
   if (lower.includes('goa') || lower.includes('beach')) return chatResponses['goa'];
   if (lower.includes('ladakh') || lower.includes('himalaya') || lower.includes('mountain')) return chatResponses['ladakh'];
   if (lower.includes('kerala') || lower.includes('backwater')) return chatResponses['kerala'];
-  if (lower.includes('international') || lower.includes('abroad') || lower.includes('bali') || lower.includes('dubai')) return chatResponses['international'];
+  if (lower.includes('international') || lower.includes('abroad') || lower.includes('bali') || lower.includes('dubai') || lower.includes('paris') || lower.includes('singapore')) {
+    return '🌍 Ganesh Travels operates exclusively within India, offering comprehensive tour packages across all 800+ districts. We do not support international travel or bookings at this time.';
+  }
   
   return defaultResponse;
 }

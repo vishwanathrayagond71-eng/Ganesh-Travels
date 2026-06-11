@@ -1,43 +1,62 @@
 {
   "states": [
     {
+      "state": "Andaman and Nicobar Islands",
+      "districts": [
+        "Nicobar",
+        "North and Middle Andaman",
+        "South Andaman"
+      ]
+    },
+    {
       "state": "Andhra Pradesh",
       "districts": [
-        "Srikakulam",
-        "Parvathipuram Manyam",
-        "Vizianagaram",
-        "Visakhapatnam",
         "Alluri Sitharama Raju",
         "Anakapalli",
-        "Kakinada",
-        "East Godavari",
-        "Konaseema",
-        "Eluru",
-        "West Godavari",
-        "Nandamuri Taraka Rama Rao",
-        "Krishna",
-        "Palnadu",
-        "Guntur",
+        "Anantapur",
+        "Ananthapuramu",
+        "Annamayya",
         "Bapatla",
+        "Chittoor",
+        "Dr. B.R. Ambedkar Konaseema",
+        "East Godavari",
+        "Eluru",
+        "Guntur",
+        "Kakinada",
+        "Konaseema",
+        "Krishna",
+        "Kurnool",
+        "Markapuram",
+        "Nandamuri Taraka Rama Rao",
+        "Nandyal",
+        "Nellore",
+        "NTR",
+        "Palnadu",
+        "Parvathipuram Manyam",
+        "Polavaram",
         "Prakasam",
         "Sri Potti Sriramulu Nellore",
-        "Kurnool",
-        "Nandyal",
-        "Anantapur",
+        "Sri Sathya Sai",
         "Sri SathyaYSR",
-        "Annamayya",
+        "Srikakulam",
         "Tirupati",
-        "Chittoor"
+        "Visakhapatnam",
+        "Vizianagaram",
+        "West Godavari",
+        "YSR Kadapa"
       ]
     },
     {
       "state": "Arunachal Pradesh",
       "districts": [
         "Anjaw",
+        "Bichom",
         "Changlang",
         "East Kameng",
         "East Siang",
+        "Itanagar City Complex",
         "Kamle",
+        "Keyi Panyor",
         "Kra Daadi",
         "Kurung Kumey",
         "Lepa Rada",
@@ -57,8 +76,7 @@
         "Upper Siang",
         "Upper Subansiri",
         "West Kameng",
-        "West Siang",
-        "Itanagar City Complex"
+        "West Siang"
       ]
     },
     {
@@ -93,12 +111,13 @@
         "Nagaon",
         "Nalbari",
         "Sivasagar",
-        "South Salmara Mankachar",
         "Sonitpur",
+        "South Salmara Mankachar",
+        "South Salmara-Mankachar",
+        "Tamulpur",
         "Tinsukia",
         "Udalguri",
-        "West Karbi Anglong",
-        "Tamulpur"
+        "West Karbi Anglong"
       ]
     },
     {
@@ -145,11 +164,19 @@
       ]
     },
     {
+      "state": "Chandigarh",
+      "districts": [
+        "Chandigarh"
+      ]
+    },
+    {
       "state": "Chhattisgarh",
       "districts": [
         "Balod",
+        "Baloda Bazar",
         "Baloda Bazar-Bhatapara",
         "Balrampur",
+        "Balrampur-Ramanujganj",
         "Bastar",
         "Bemetara",
         "Bijapur",
@@ -158,33 +185,62 @@
         "Dhamtari",
         "Durg",
         "Gariaband",
+        "Gaurela-Pendra-Marwahi",
         "Gaurella-Pendra-Marwahi",
         "Janjgir-Champa",
         "Jashpur",
         "Kabirdham",
         "Kanker",
+        "Khairagarh-Chhuikhadan-Gandai",
         "Kondagaon",
         "Korba",
         "Korea",
         "Mahasamund",
         "Manendragarh-Chirmiri-Bharatpur",
         "Mohla Manpur",
+        "Mohla-Manpur-Ambagarh Chowki",
         "Mungeli",
         "Narayanpur",
         "Raigarh",
         "Raipur",
         "Rajnandgaon",
+        "Sakti",
         "Sarangarh-Bilaigarh",
         "Shakti",
         "Sukma",
         "Surajpur",
-        "Surguja",
-        "Khairagarh-Chhuikhadan-Gandai"
+        "Surguja"
+      ]
+    },
+    {
+      "state": "Dadra and Nagar Haveli and Daman and Diu",
+      "districts": [
+        "Dadra and Nagar Haveli",
+        "Daman",
+        "Diu"
+      ]
+    },
+    {
+      "state": "Delhi",
+      "districts": [
+        "Central Delhi",
+        "East Delhi",
+        "New Delhi",
+        "North Delhi",
+        "North East Delhi",
+        "North West Delhi",
+        "Shahdara",
+        "Shahdara district",
+        "South Delhi",
+        "South East Delhi",
+        "South West Delhi",
+        "West Delhi"
       ]
     },
     {
       "state": "Goa",
       "districts": [
+        "Kushavati",
         "North Goa",
         "South Goa"
       ]
@@ -224,7 +280,8 @@
         "Surendranagar",
         "Tapi",
         "Vadodara",
-        "Valsad"
+        "Valsad",
+        "Vav-Tharad"
       ]
     },
     {
@@ -236,6 +293,7 @@
         "Faridabad",
         "Fatehabad",
         "Gurugram",
+        "Hansi",
         "Hisar",
         "Jhajjar",
         "Jind",
@@ -272,6 +330,31 @@
       ]
     },
     {
+      "state": "Jammu and Kashmir",
+      "districts": [
+        "Anantnag",
+        "Bandipore",
+        "Baramulla",
+        "Budgam",
+        "Doda",
+        "Ganderbal",
+        "Jammu",
+        "Kathua",
+        "Kishtwar",
+        "Kulgam",
+        "Kupwara",
+        "Poonch",
+        "Pulwama",
+        "Rajouri",
+        "Ramban",
+        "Reasi",
+        "Samba",
+        "Shopian",
+        "Srinagar",
+        "Udhampur"
+      ]
+    },
+    {
       "state": "Jharkhand",
       "districts": [
         "Bokaro",
@@ -304,11 +387,15 @@
       "state": "Karnataka",
       "districts": [
         "Bagalkot",
-        "Bellary",
-        "Belgaum",
+        "Ballari",
         "Bangalore Rural",
         "Bangalore Urban",
+        "Belagavi",
+        "Belgaum",
+        "Bellary",
         "Bidar",
+        "Bijapur",
+        "Chamarajanagar",
         "Chamarajanagara",
         "Chikkaballapur",
         "Chikmagalur",
@@ -317,11 +404,14 @@
         "Davanagere",
         "Dharwad",
         "Gadag",
+        "Gadaga",
         "Gulbarga",
         "Hassan",
         "Haveri",
+        "Kalaburagi",
         "Kodagu",
         "Kolar",
+        "Koppal",
         "Koppala",
         "Mandya",
         "Mysore",
@@ -350,9 +440,27 @@
         "Malappuram",
         "Palakkad",
         "Pathanamthitta",
-        "Thrissur",
         "Thiruvananthapuram",
+        "Thrissur",
         "Wayanad"
+      ]
+    },
+    {
+      "state": "Ladakh",
+      "districts": [
+        "Changthang",
+        "Drass",
+        "Kargil",
+        "Leh",
+        "Nubra",
+        "Sham",
+        "Zanskar"
+      ]
+    },
+    {
+      "state": "Lakshadweep",
+      "districts": [
+        "Lakshadweep"
       ]
     },
     {
@@ -379,21 +487,26 @@
         "Guna",
         "Gwalior",
         "Harda",
-        "Narmadapuram",
+        "Hoshangabad",
         "Indore",
         "Jabalpur",
         "Jhabua",
         "Katni",
+        "Khandwa",
         "Khandwa (East Nimar)",
+        "Khargone",
         "Khargone (West Nimar)",
         "Maihar",
         "Mandla",
         "Mandsaur",
+        "Mauganj",
         "Morena",
-        "Narsinghpur",
         "Nagda",
+        "Narmadapuram",
+        "Narsinghpur",
         "Neemuch",
         "Niwari",
+        "Pandhurna",
         "Panna",
         "Raisen",
         "Rajgarh",
@@ -436,9 +549,10 @@
         "Latur",
         "Mumbai City",
         "Mumbai suburban",
+        "Mumbai Suburban",
+        "Nagpur",
         "Nanded",
         "Nandurbar",
-        "Nagpur",
         "Nashik",
         "Osmanabad",
         "Palghar",
@@ -481,16 +595,17 @@
       "state": "Meghalaya",
       "districts": [
         "East Garo Hills",
-        "East Khasi Hills",
         "East Jaintia Hills",
+        "East Khasi Hills",
+        "Eastern West Khasi Hills",
         "Eastern West Khasi Hills district",
         "North Garo Hills",
         "Ri Bhoi",
         "South Garo Hills",
         "South West Garo Hills",
         "South West Khasi Hills",
-        "West Jaintia Hills",
         "West Garo Hills",
+        "West Jaintia Hills",
         "West Khasi Hills"
       ]
     },
@@ -535,35 +650,48 @@
       "state": "Odisha",
       "districts": [
         "Angul",
-        "Boudh (Bauda)",
-        "Bhadrak",
         "Balangir",
-        "Bargarh (Baragarh)",
         "Balasore",
+        "Bargarh",
+        "Bargarh (Baragarh)",
+        "Bhadrak",
+        "Boudh",
+        "Boudh (Bauda)",
         "Cuttack",
+        "Debagarh",
         "Debagarh (Deogarh)",
         "Dhenkanal",
-        "Ganjam",
         "Gajapati",
-        "Jharsuguda",
-        "Jajpur",
+        "Ganjam",
         "Jagatsinghpur",
-        "Khordha",
-        "Kendujhar",
+        "Jajpur",
+        "Jharsuguda",
         "Kalahandi",
         "Kandhamal",
-        "Koraput",
         "Kendrapara",
+        "Kendujhar",
+        "Khordha",
+        "Koraput",
         "Malkangiri",
         "Mayurbhanj",
         "Nabarangpur",
-        "Nuapada",
         "Nayagarh",
+        "Nuapada",
         "Puri",
         "Rayagada",
         "Sambalpur",
+        "Subarnapur",
         "Subarnapur (Sonepur)",
         "Sundargarh"
+      ]
+    },
+    {
+      "state": "Puducherry",
+      "districts": [
+        "Karaikal",
+        "Mahé",
+        "Puducherry",
+        "Yanam"
       ]
     },
     {
@@ -572,10 +700,11 @@
         "Amritsar",
         "Barnala",
         "Bathinda",
-        "Firozpur",
         "Faridkot",
         "Fatehgarh Sahib",
         "Fazilka",
+        "Fazilka&#91;a&#93;",
+        "Firozpur",
         "Gurdaspur",
         "Hoshiarpur",
         "Jalandhar",
@@ -584,13 +713,13 @@
         "Malerkotla",
         "Mansa",
         "Moga",
-        "Sri Muktsar Sahib",
         "Pathankot",
         "Patiala",
         "Rupnagar",
         "Sahibzada Ajit Singh Nagar",
         "Sangrur",
         "Shahid Bhagat Singh Nagar",
+        "Sri Muktsar Sahib",
         "Tarn Taran"
       ]
     },
@@ -599,35 +728,43 @@
       "districts": [
         "Ajmer",
         "Alwar",
-        "Bikaner",
-        "Barmer",
+        "Balotra",
         "Banswara",
-        "Bharatpur",
         "Baran",
-        "Bundi",
+        "Barmer",
+        "Beawar",
+        "Bharatpur",
         "Bhilwara",
-        "Churu",
+        "Bikaner",
+        "Bundi",
         "Chittorgarh",
+        "Churu",
         "Dausa",
+        "Deeg",
         "Dholpur",
+        "Didwana Kuchaman",
         "Dungarpur",
-        "Sri Ganganagar",
         "Hanumangarh",
-        "Jhunjhunu",
-        "Jalore",
-        "Jodhpur",
         "Jaipur",
         "Jaisalmer",
+        "Jalore",
         "Jhalawar",
+        "Jhunjhunu",
+        "Jodhpur",
         "Karauli",
+        "Khairthal-Tijara",
         "Kota",
+        "Kotputli-Behror",
         "Nagaur",
         "Pali",
+        "Phalodi",
         "Pratapgarh",
         "Rajsamand",
-        "Sikar",
+        "Salumbar",
         "Sawai Madhopur",
+        "Sikar",
         "Sirohi",
+        "Sri Ganganagar",
         "Tonk",
         "Udaipur"
       ]
@@ -636,6 +773,10 @@
       "state": "Sikkim",
       "districts": [
         "East Sikkim",
+        "Gangtok",
+        "Gyalshing",
+        "Mangan",
+        "Namchi",
         "North Sikkim",
         "Pakyong",
         "Soreng",
@@ -662,8 +803,8 @@
         "Madurai",
         "Mayiladuthurai",
         "Nagapattinam",
-        "Nilgiris",
         "Namakkal",
+        "Nilgiris",
         "Perambalur",
         "Pudukkottai",
         "Ramanathapuram",
@@ -671,16 +812,16 @@
         "Salem",
         "Sivaganga",
         "Tenkasi",
-        "Tiruppur",
-        "Tiruchirappalli",
-        "Theni",
-        "Tirunelveli",
         "Thanjavur",
+        "Theni",
         "Thoothukudi",
+        "Tiruchirappalli",
+        "Tirunelveli",
         "Tirupattur",
+        "Tiruppur",
         "Tiruvallur",
-        "Tiruvarur",
         "Tiruvannamalai",
+        "Tiruvarur",
         "Vellore",
         "Viluppuram",
         "Virudhunagar"
@@ -707,9 +848,9 @@
         "Medak",
         "Medchal–Malkajgiri",
         "Mulugu",
+        "Nagarkurnool",
         "Nalgonda",
         "Narayanpet",
-        "Nagarkurnool",
         "Nirmal",
         "Nizamabad",
         "Peddapalli",
@@ -730,10 +871,13 @@
         "Dhalai",
         "Gomati",
         "Khowai",
+        "Khowai&#91;a&#93;",
         "North Tripura",
         "Sepahijala",
+        "Sepahijala&#91;b&#93;",
         "South Tripura",
         "Unakoti",
+        "Unakoti&#91;c&#93;",
         "West Tripura"
       ]
     },
@@ -747,6 +891,7 @@
         "Amethi",
         "Amroha",
         "Auraiya",
+        "Ayodhya",
         "Azamgarh",
         "Bagpat",
         "Bahraich",
@@ -801,6 +946,7 @@
         "Muzaffarnagar",
         "Pilibhit",
         "Pratapgarh",
+        "Prayagraj",
         "Raebareli",
         "Rampur",
         "Saharanpur",
@@ -808,6 +954,7 @@
         "Sant Kabir Nagar",
         "Shahjahanpur",
         "Shamli",
+        "Shamli&#91;26&#93;",
         "Shravasti",
         "Siddharthnagar",
         "Sitapur",
@@ -844,8 +991,6 @@
       "districts": [
         "Alipurduar",
         "Bankura",
-        "Paschim Bardhaman",
-        "Purba Bardhaman",
         "Birbhum",
         "Cooch Behar",
         "Dakshin Dinajpur",
@@ -860,96 +1005,13 @@
         "Murshidabad",
         "Nadia",
         "North 24 Parganas",
+        "Paschim Bardhaman",
         "Paschim Medinipur",
+        "Purba Bardhaman",
         "Purba Medinipur",
         "Purulia",
         "South 24 Parganas",
         "Uttar Dinajpur"
-      ]
-    },
-    {
-      "state": "Andaman and Nicobar Islands",
-      "districts": [
-        "Nicobar",
-        "North and Middle Andaman",
-        "South Andaman"
-      ]
-    },
-    {
-      "state": "Chandigarh",
-      "districts": [
-        "Chandigarh"
-      ]
-    },
-    {
-      "state": "Dadra and Nagar Haveli and Daman and Diu",
-      "districts": [
-        "Daman",
-        "Diu",
-        "Dadra and Nagar Haveli"
-      ]
-    },
-    {
-      "state": "Jammu and Kashmir",
-      "districts": [
-        "Anantnag",
-        "Budgam",
-        "Bandipore",
-        "Baramulla",
-        "Doda",
-        "Ganderbal",
-        "Jammu",
-        "Kathua",
-        "Kishtwar",
-        "Kulgam",
-        "Kupwara",
-        "Poonch",
-        "Pulwama",
-        "Rajouri",
-        "Ramban",
-        "Reasi",
-        "Samba",
-        "Shopian",
-        "Srinagar",
-        "Udhampur"
-      ]
-    },
-    {
-      "state": "Ladakh",
-      "districts": [
-        "Kargil",
-        "Leh"
-      ]
-    },
-    {
-      "state": "Lakshadweep",
-      "districts": [
-        "Lakshadweep"
-      ]
-    },
-    {
-      "state": "Delhi",
-      "districts": [
-        "Central Delhi",
-        "East Delhi",
-        "New Delhi",
-        "North Delhi",
-        "North East Delhi",
-        "North West Delhi",
-        "Shahdara district",
-        "South Delhi",
-        "South East Delhi",
-        "South West Delhi",
-        "West Delhi"
-      ]
-    },
-    {
-      "state": "Puducherry",
-      "districts": [
-        "Karaikal",
-        "Mahé",
-        "Puducherry",
-        "Yanam"
       ]
     }
   ]
