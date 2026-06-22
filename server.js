@@ -107,7 +107,7 @@ async function startServer() {
     // Initialize all Excel sheets before starting the server
     await initAllSheets();
     app.listen(PORT, () => {
-      console.log(`🚀 Ganesh Travels is running at http://localhost:${PORT}`);
+      console.log(`🚀 Travel-India is running at http://localhost:${PORT}`);
       console.log(`📊 Admin Panel: http://localhost:${PORT}/admin/login`);
     });
   } catch (err) {

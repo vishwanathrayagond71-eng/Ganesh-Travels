@@ -50,7 +50,7 @@ router.get('/', async (req, res) => {
     const approvedReviews = reviews.filter(r => r.status === 'approved').slice(-6);
     const dests = await excel.readData('destinations');
     res.render('home', {
-      title: 'Ganesh Travels - Discover India & Beyond',
+      title: 'Travel-India - Discover India & Beyond',
       user: req.session.user || null,
       destinations: formatDestinations(dests).slice(0, 6),
       packages: packages.slice(0, 3),
@@ -59,7 +59,7 @@ router.get('/', async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.render('home', { title: 'Ganesh Travels', user: req.session.user || null, destinations: [], packages: packages.slice(0, 3), reviews: [], messages: {} });
+    res.render('home', { title: 'Travel-India', user: req.session.user || null, destinations: [], packages: packages.slice(0, 3), reviews: [], messages: {} });
   }
 });
 
@@ -67,9 +67,9 @@ router.get('/', async (req, res) => {
 router.get('/about', async (req, res) => {
   try {
     const team = await excel.readData('team');
-    res.render('about', { title: 'About Us - Ganesh Travels', user: req.session.user || null, team, messages: req.flash() });
+    res.render('about', { title: 'About Us - Travel-India', user: req.session.user || null, team, messages: req.flash() });
   } catch (err) {
-    res.render('about', { title: 'About Us - Ganesh Travels', user: req.session.user || null, team: [], messages: req.flash() });
+    res.render('about', { title: 'About Us - Travel-India', user: req.session.user || null, team: [], messages: req.flash() });
   }
 });
 
@@ -77,10 +77,10 @@ router.get('/about', async (req, res) => {
 router.get('/destinations', async (req, res) => {
   try {
     const dests = await excel.readData('destinations');
-    res.render('destinations', { title: 'Destinations - Ganesh Travels', user: req.session.user || null, destinations: formatDestinations(dests), messages: req.flash() });
+    res.render('destinations', { title: 'Destinations - Travel-India', user: req.session.user || null, destinations: formatDestinations(dests), messages: req.flash() });
   } catch (err) {
     console.error(err);
-    res.render('destinations', { title: 'Destinations - Ganesh Travels', user: req.session.user || null, destinations: [], messages: req.flash() });
+    res.render('destinations', { title: 'Destinations - Travel-India', user: req.session.user || null, destinations: [], messages: req.flash() });
   }
 });
 
@@ -179,7 +179,7 @@ router.get('/destinations/:id', async (req, res) => {
     }
 
     res.render('destination-detail', {
-      title: `${destination.name} - Local Guide & Booking | Ganesh Travels`,
+      title: `${destination.name} - Local Guide & Booking | Travel-India`,
       user: req.session.user || null,
       destination,
       destinations: formattedDests, // passed to populate booking form options
@@ -197,21 +197,21 @@ router.get('/destinations/:id', async (req, res) => {
 router.get('/explore', async (req, res) => {
   try {
     const pois = await excel.readData('pois');
-    res.render('explore', { title: 'Explore GPS - Ganesh Travels', user: req.session.user || null, pois, messages: req.flash() });
+    res.render('explore', { title: 'Explore GPS - Travel-India', user: req.session.user || null, pois, messages: req.flash() });
   } catch (err) {
     console.error('[Explore Route Error]:', err);
-    res.render('explore', { title: 'Explore GPS - Ganesh Travels', user: req.session.user || null, pois: [], messages: req.flash() });
+    res.render('explore', { title: 'Explore GPS - Travel-India', user: req.session.user || null, pois: [], messages: req.flash() });
   }
 });
 
 // Packages Page
 router.get('/packages', (req, res) => {
-  res.render('packages', { title: 'Tour Packages - Ganesh Travels', user: req.session.user || null, packages, messages: req.flash() });
+  res.render('packages', { title: 'Tour Packages - Travel-India', user: req.session.user || null, packages, messages: req.flash() });
 });
 
 // Contact Page
 router.get('/contact', (req, res) => {
-  res.render('contact', { title: 'Contact Us - Ganesh Travels', user: req.session.user || null, messages: req.flash() });
+  res.render('contact', { title: 'Contact Us - Travel-India', user: req.session.user || null, messages: req.flash() });
 });
 
 // Save Contact Form
@@ -252,10 +252,10 @@ router.get('/booking', async (req, res) => {
   try {
     const dests = await excel.readData('destinations');
     const preDestination = req.query.destination || '';
-    res.render('booking', { title: 'Book Your Tour - Ganesh Travels', user: req.session.user || null, destinations: formatDestinations(dests), packages, preDestination, messages: req.flash() });
+    res.render('booking', { title: 'Book Your Tour - Travel-India', user: req.session.user || null, destinations: formatDestinations(dests), packages, preDestination, messages: req.flash() });
   } catch (err) {
     console.error(err);
-    res.render('booking', { title: 'Book Your Tour - Ganesh Travels', user: req.session.user || null, destinations: [], packages, preDestination: '', messages: req.flash() });
+    res.render('booking', { title: 'Book Your Tour - Travel-India', user: req.session.user || null, destinations: [], packages, preDestination: '', messages: req.flash() });
   }
 });
 
@@ -288,7 +288,7 @@ router.get('/reviews', async (req, res) => {
     const reviews = await excel.readData('reviews');
     const approvedReviews = reviews.filter(r => r.status === 'approved');
     const dests = await excel.readData('destinations');
-    res.render('reviews', { title: 'Customer Reviews - Ganesh Travels', user: req.session.user || null, reviews: approvedReviews, destinations: formatDestinations(dests), messages: req.flash() });
+    res.render('reviews', { title: 'Customer Reviews - Travel-India', user: req.session.user || null, reviews: approvedReviews, destinations: formatDestinations(dests), messages: req.flash() });
   } catch (err) {
     res.render('reviews', { title: 'Reviews', user: req.session.user || null, reviews: [], destinations: [], messages: {} });
   }
@@ -322,7 +322,7 @@ router.post('/reviews', async (req, res) => {
 
 // Register (GET)
 router.get('/register', redirectIfLoggedIn, (req, res) => {
-  res.render('register', { title: 'Register - Ganesh Travels', user: null, messages: req.flash() });
+  res.render('register', { title: 'Register - Travel-India', user: null, messages: req.flash() });
 });
 
 // Register (POST)
@@ -374,7 +374,7 @@ router.post('/register', redirectIfLoggedIn, async (req, res) => {
 
 // Login (GET)
 router.get('/login', redirectIfLoggedIn, (req, res) => {
-  res.render('login', { title: 'Login - Ganesh Travels', user: null, messages: req.flash() });
+  res.render('login', { title: 'Login - Travel-India', user: null, messages: req.flash() });
 });
 
 // Login (POST)
@@ -426,7 +426,7 @@ router.get('/dashboard', requireUser, async (req, res) => {
     const userBookings = allBookings.filter(b => b.userEmail === req.session.user.email);
     const userReviews = allReviews.filter(r => r.userEmail === req.session.user.email);
     res.render('dashboard', {
-      title: 'My Dashboard - Ganesh Travels',
+      title: 'My Dashboard - Travel-India',
       user: req.session.user,
       bookings: userBookings,
       reviews: userReviews,
@@ -459,7 +459,7 @@ router.post('/dashboard/edit-profile', requireUser, async (req, res) => {
 
 // Admin Login (GET)
 router.get('/admin/login', redirectIfAdminLoggedIn, (req, res) => {
-  res.render('admin-login', { title: 'Admin Login - Ganesh Travels', messages: req.flash() });
+  res.render('admin-login', { title: 'Admin Login - Travel-India', messages: req.flash() });
 });
 
 // Admin Login (POST)
@@ -510,7 +510,7 @@ router.get('/admin/dashboard', requireAdmin, async (req, res) => {
     const currentEmail = emailSetting ? emailSetting.value : 'xyz7@gmail.com';
 
     res.render('admin-dashboard', {
-      title: 'Admin Dashboard - Ganesh Travels',
+      title: 'Admin Dashboard - Travel-India',
       admin: req.session.admin,
       users, bookings, reviews, contacts, newsletter, settings, team, pois,
       destinations: formatDestinations(destinationsList),
@@ -807,7 +807,7 @@ router.get('/api/destinations/search', async (req, res) => {
             reviews: String(10 + Math.floor(Math.random() * 150)),
             lat: String(resolved.lat),
             lng: String(resolved.lng),
-            guideName: 'Ganesh Travels Guide',
+            guideName: 'Travel-India Guide',
             createdAt: new Date().toLocaleString()
           };
 

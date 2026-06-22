@@ -11,7 +11,7 @@ function httpGet(url) {
   return new Promise((resolve, reject) => {
     const options = {
       headers: {
-        'User-Agent': 'GaneshTravelsApp/1.0 (contact: admin@ganeshtravels.com)'
+        'User-Agent': 'TravelIndiaApp/1.0 (contact: admin@travelindia.com)'
       },
       timeout: 6000 // 6 seconds timeout
     };

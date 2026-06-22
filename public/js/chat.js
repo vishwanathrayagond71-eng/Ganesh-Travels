@@ -15,7 +15,7 @@ const chatResponses = {
   
   'price': '💰 Our prices start from:\n• Budget trips: ₹5,999/person\n• Family packages: ₹12,999\n• Honeymoon: ₹19,999\n• Premium tours: ₹24,999+\nCheck our <a href="/packages" style="color:#e9c46a">Packages</a> for exact pricing!',
   
-  'contact': `📞 Reach us at:\n• Phone: ${window.contactPhone || '+91 98765 43210'}\n• Email: ${window.contactEmail || 'xyz7@gmail.com'}\n• Office: Ganesh Travels, Vidyagiri, Bagalkote, Karnataka\n• Hours: Mon-Sat 9AM-7PM\nOr visit our <a href="/contact" style="color:#e9c46a">Contact page</a>!`,
+  'contact': `📞 Reach us at:\n• Phone: ${window.contactPhone || '+91 98765 43210'}\n• Email: ${window.contactEmail || 'xyz7@gmail.com'}\n• Office: Travel-India, Vidyagiri, Bagalkote, Karnataka\n• Hours: Mon-Sat 9AM-7PM\nOr visit our <a href="/contact" style="color:#e9c46a">Contact page</a>!`,
   
   'goa': '🌊 Goa is fantastic! Our Goa package includes:\n• Boutique hotel stay\n• Beach activities\n• Scooter rental\n• City tour\n• Starting from ₹12,999\n<a href="/booking?destination=Goa Beaches" style="color:#e9c46a">Book Goa Now →</a>',
   
@@ -25,7 +25,7 @@ const chatResponses = {
   
   'domestic': '🇮🇳 Popular Indian destinations:\n• Taj Mahal, Agra — ₹8,999\n• Manali, Himachal — ₹14,999\n• Jaipur, Rajasthan — ₹9,999\n• Coorg, Karnataka — ₹7,999\n<a href="/destinations" style="color:#e9c46a">Explore All Domestic Tours →</a>',
 
-  'hello': `👋 Hello! Welcome to Ganesh Travels! I'm your travel assistant. How can I help you plan your dream vacation? You can ask me about destinations, packages, pricing, or how to book! 😊`,
+  'hello': `👋 Hello! Welcome to Travel-India! I'm your travel assistant. How can I help you plan your dream vacation? You can ask me about destinations, packages, pricing, or how to book! 😊`,
   
   'hi': '👋 Hi there! Great to meet you! I\'m your virtual travel guide. Ask me anything about our tours, destinations, or packages! 🌍',
   
@@ -122,7 +122,7 @@ function getBotResponse(message) {
   if (lower.includes('ladakh') || lower.includes('himalaya') || lower.includes('mountain')) return chatResponses['ladakh'];
   if (lower.includes('kerala') || lower.includes('backwater')) return chatResponses['kerala'];
   if (lower.includes('international') || lower.includes('abroad') || lower.includes('bali') || lower.includes('dubai') || lower.includes('paris') || lower.includes('singapore')) {
-    return '🌍 Ganesh Travels operates exclusively within India, offering comprehensive tour packages across all 800+ districts. We do not support international travel or bookings at this time.';
+    return '🌍 Travel-India operates exclusively within India, offering comprehensive tour packages across all 800+ districts. We do not support international travel or bookings at this time.';
   }
   
   return defaultResponse;
